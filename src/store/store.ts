@@ -6,15 +6,24 @@ interface TodoStore {
   todos: Todo[];
   isLoading: boolean;
   error: string | null;
+  sortOrder: "asc" | "desc";
+  filterCompleted: boolean | null;
+  setSortOrder: (order: "asc" | "desc") => void;
+  setFilterCompleted: (completed: boolean | null) => void;
   addTodo: (todo: Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
   toggleTodo: (id: string, completed: boolean) => Promise<void>;
   fetchTodos: () => Promise<void>;
 }
 
-export const useStore = create<TodoStore>((set) => ({
+export const useStore = create<TodoStore>((set, get) => ({
   todos: [],
   isLoading: false,
   error: null,
+  sortOrder: "desc",
+  filterCompleted: null,
+
+  setSortOrder: (order) => set({ sortOrder: order }),
+  setFilterCompleted: (completed) => set({ filterCompleted: completed }),
 
   fetchTodos: async () => {
     try {
