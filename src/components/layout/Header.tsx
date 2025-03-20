@@ -1,4 +1,11 @@
-import { Button } from '../ui/Button';
+import { Container, Text } from "@react-three/uikit";
+import { Button } from "../ui/Button";
+import {
+  Plus,
+  ArrowUpWideNarrow,
+  ArrowDownWideNarrow,
+} from "@react-three/uikit-lucide";
+import { AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@react-three/uikit-default";
 
 interface HeaderProps {
   width: number;
@@ -6,42 +13,24 @@ interface HeaderProps {
   onAddClick: () => void;
   onSortClick: () => void;
   onFilterClick: () => void;
-  sortOrder: 'asc' | 'desc';
+  sortOrder: "asc" | "desc";
   filterCompleted: boolean | null;
 }
 
-export const Header = ({
-  width,
-  height,
-  onAddClick,
-  onSortClick,
-  onFilterClick,
-  sortOrder,
-  filterCompleted,
-}: HeaderProps) => {
+export const Header = () => {
   return (
-    <>
-      <Button
-        position={[-width / 2, height / 2 + 1, 0]}
-        size={[2, 0.8, 0.1]}
-        onClick={onAddClick}
-      >
-        Добавить
-      </Button>
-      <Button
-        position={[width / 2 - 4, height / 2 + 1, 0]}
-        size={[2, 0.8, 0.1]}
-        onClick={onSortClick}
-      >
-        {sortOrder === 'asc' ? 'Сортировка ↓' : 'Сортировка ↑'}
-      </Button>
-      <Button
-        position={[width / 2 - 1, height / 2 + 1, 0]}
-        size={[2, 0.8, 0.1]}
-        onClick={onFilterClick}
-      >
-        {filterCompleted === null ? 'Все' : filterCompleted ? 'Активные' : 'Завершенные'}
-      </Button>
-    </>
+    <Container
+      width={"auto"}
+      flexDirection={"row"}
+      justifyContent={"space-between"}
+    >
+      <AlertDialogTrigger>
+        <Button icon={Plus} iconProps={{ width: 15, height: 15 }} />
+      </AlertDialogTrigger>
+      <Container flexDirection={"row"} gap={1}>
+        <Button icon={ArrowUpWideNarrow} />
+        <Button icon={ArrowDownWideNarrow} />
+      </Container>
+    </Container>
   );
-}; 
+};

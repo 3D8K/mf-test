@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Text } from '@react-three/drei';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -23,7 +23,10 @@ export const TaskForm = ({
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState<Priority>('low');
 
-  const handleSubmit = () => {
+  const adjustedHeight = useMemo(() => height + 2, [height]);
+  const spacing = useMemo(() => adjustedHeight / 5, [adjustedHeight]); // Равномерные отступы
+
+  const handleSubmit = useCallback(() => {
     if (!title.trim()) return;
     onSubmit({
       title: title.trim(),
@@ -32,75 +35,67 @@ export const TaskForm = ({
     });
     setTitle('');
     setPriority('low');
-  };
+  }, [title, priority, onSubmit]);
 
   return (
     <group position={position}>
       {/* Фон формы */}
       <mesh
-        geometry={new THREE.PlaneGeometry(width, height)}
-        material={new THREE.MeshStandardMaterial({
-          color: '#ffffff',
-          side: THREE.DoubleSide,
-        })}
+        geometry={useMemo(() => new THREE.PlaneGeometry(width, adjustedHeight), [width, adjustedHeight])}
+        material={useMemo(
+          () =>
+            new THREE.MeshStandardMaterial({
+              color: '#ffffff',
+              side: THREE.DoubleSide,
+            }),
+          []
+        )}
       />
-      
+
       {/* Заголовок */}
       <Text
-        position={[0, height / 2 - 0.5, 0.1]}
+        position={[0, adjustedHeight / 2 - spacing, 0.1]}
         fontSize={0.8}
         color="#000000"
         anchorX="center"
-        anchorY="top"
+        anchorY="middle"
       >
         Новая задача
       </Text>
 
       {/* Поле ввода */}
       <Input
-        position={[-width / 2 + 5, height / 2 - 2, 0.1]}
-        width={width - 1}
+        position={[0, adjustedHeight / 2 - 2 * spacing, 0.1]}
+        width={width - 2}
         height={0.8}
         value={title}
         onChange={setTitle}
         placeholder="Введите название задачи"
         fontSize={0.5}
+        anchorX="center"
       />
 
       {/* Группа кнопок приоритета */}
-      <group position={[0, height / 2 - 3, 0.1]}>
-        <Button
-          position={[-width / 3, 0, 0]}
-          size={[width / 4, 0.8, 0.1]}
-          onClick={() => setPriority('low')}
-          color={priority === 'low' ? '#4CAF50' : '#9E9E9E'}
-        >
-          Низкий
-        </Button>
-        <Button
-          position={[0, 0, 0]}
-          size={[width / 4, 0.8, 0.1]}
-          onClick={() => setPriority('medium')}
-          color={priority === 'medium' ? '#FFC107' : '#9E9E9E'}
-        >
-          Средний
-        </Button>
-        <Button
-          position={[width / 3, 0, 0]}
-          size={[width / 4, 0.8, 0.1]}
-          onClick={() => setPriority('high')}
-          color={priority === 'high' ? '#F44336' : '#9E9E9E'}
-        >
-          Высокий
-        </Button>
+      <group position={[0, adjustedHeight / 2 - 3 * spacing, 0.1]}>
+        {(['low', 'medium', 'high'] as Priority[]).map((level, index) => (
+          <Button
+            key={level}
+            position={[(-1 + index) * (width / 3), 0, 0]}
+            size={[width / 4, 0.8, 0.1]}
+            onClick={() => setPriority(level)}
+            color={priority === level ? (level === 'low' ? '#4CAF50' : level === 'medium' ? '#FFC107' : '#F44336') : '#9E9E9E'}
+          >
+            {level === 'low' ? 'Низкий' : level === 'medium' ? 'Средний' : 'Высокий'}
+          </Button>
+        ))}
       </group>
 
       {/* Группа кнопок управления */}
-      <group position={[0, -height / 2 + 1, 0.1]}>
+      <group position={[0, adjustedHeight / 2 - 4 * spacing, 0.1]}>
         <Button
           position={[-width / 4, 0, 0]}
           size={[width / 3, 0.8, 0.1]}
-          onClick={() => onCancel()}
+          onClick={onCancel}
           color="#f44336"
         >
           Отмена
@@ -116,4 +111,4 @@ export const TaskForm = ({
       </group>
     </group>
   );
-}; 
+};

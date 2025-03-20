@@ -1,55 +1,59 @@
-import { useState } from 'react';
-import { Text } from '@react-three/drei';
-import * as THREE from 'three';
+import React from 'react';
+import { Button as ButtonComponent, ButtonProperties } from '@react-three/uikit-default';
+import { Icon, Text, IconProperties } from '@react-three/uikit';
 
-interface ButtonProps {
-  position: [number, number, number];
-  size: [number, number, number];
-  onClick: () => void;
-  children: string;
+// Определяем типы для пропсов
+type ButtonSize = "default" | "sm" | "lg" | "icon";
+type ButtonVariant = 'default' | 'outline' | 'ghost';
+type ButtonColor = string;
+type ButtonRadius = number | undefined;
+type ButtonPadding = number | undefined;
+
+type IconType = React.ElementType<IconProperties>;
+
+interface UniversalButtonProps extends ButtonProperties {
+  onClick?: () => void; // Функция нажатия
+  icon?: IconType; // Иконка как компонент
+  iconProps?: IconProperties; // Пропсы для иконки
+  text?: string; // Текст кнопки
+  borderRadius?: ButtonRadius; // Закругление углов
+  variant?: ButtonVariant; // Вариант кнопки
   color?: string;
-  disabled?: boolean;
 }
 
-export const Button = ({
-  position,
-  size: [width, height, depth],
+// Дефолтные значения
+const DEFAULT_SIZE: ButtonSize = 'sm';
+const DEFAULT_COLOR: ButtonColor = '#edeef1';
+const DEFAULT_RADIUS: ButtonRadius = 4;
+const DEFAULT_VARIANT: ButtonVariant = 'outline';
+const DEFAULT_PADDING: ButtonPadding = 1;
+
+export function Button({
+  size = DEFAULT_SIZE,
+  color = DEFAULT_COLOR,
   onClick,
-  children,
-  color = '#4a90e2',
-  disabled = false,
-}: ButtonProps) => {
-  const [textWidth, setTextWidth] = useState(0);
-
-  // Рассчитываем минимальную ширину кнопки на основе текста
-  const minWidth = Math.max(width, textWidth + 1); // Добавляем отступы по 0.5 с каждой стороны
-
+  icon: IconComponent,
+  text,
+  borderRadius = DEFAULT_RADIUS,
+  variant = DEFAULT_VARIANT,
+  padding = DEFAULT_PADDING,
+  iconProps = {},
+  ...props
+}: UniversalButtonProps) {
   return (
-    <group position={position}>
-      <mesh
-        onClick={disabled ? undefined : onClick}
-        geometry={new THREE.BoxGeometry(minWidth, height, depth)}
-        material={new THREE.MeshStandardMaterial({
-          color: disabled ? '#cccccc' : color,
-          metalness: 0.5,
-          roughness: 0.2,
-        })}
-      >
-        <Text
-          position={[0, 0, 0.1]}
-          fontSize={height * 0.4}
-          color={disabled ? '#666666' : '#ffffff'}
-          anchorX="center"
-          anchorY="middle"
-          onSync={(text) => {
-            // Получаем ширину текста после его рендеринга
-            const textWidth = text.geometry.boundingBox.max.x - text.geometry.boundingBox.min.x;
-            setTextWidth(textWidth);
-          }}
-        >
-          {children}
-        </Text>
-      </mesh>
-    </group>
+    <ButtonComponent
+      size={size}
+      backgroundColor={color}
+     width={20}
+     height={20}
+      borderRadius={borderRadius}
+      padding={padding}
+      variant={variant}
+      onClick={onClick}
+      {...props}
+    >
+      {IconComponent && <IconComponent {...iconProps} />}
+      {text && <Text>{text}</Text>}
+    </ButtonComponent>
   );
-}; 
+}

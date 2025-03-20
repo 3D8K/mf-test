@@ -1,20 +1,27 @@
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import { useState, useEffect } from 'react';
-import { TaskList } from './components/tasks/TaskList';
-import { TaskForm } from './components/forms/TaskForm';
-import { Header } from './components/layout/Header';
-import { Todo } from './types/Todo';
-import { useStore } from './store/store';
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { useState, useEffect } from "react";
+import { TaskList } from "./components/tasks/TaskList";
+import { TaskForm } from "./components/forms/TaskForm";
+import { Header } from "./components/layout/Header";
+import {
+  AlertDialog,
+  Defaults,
+  DialogAnchor,
+} from "@react-three/uikit-default";
+import { Todo } from "./types/Todo";
+import { useStore } from "./store/store";
+import { Root } from "@react-three/uikit";
+import Modal from "./components/modal/Modal";
 
-const LIST_WIDTH = 10;
+const LIST_WIDTH = 20;
 const LIST_HEIGHT = 8;
 const ITEM_HEIGHT = 1;
 const FORM_HEIGHT = 10;
 
 export const App = () => {
   const [showForm, setShowForm] = useState(false);
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [filterCompleted, setFilterCompleted] = useState<boolean | null>(null);
 
   const { todos, addTodo, toggleTodo, fetchTodos } = useStore();
@@ -23,7 +30,9 @@ export const App = () => {
     fetchTodos();
   }, [fetchTodos]);
 
-  const handleAddTodo = (todo: Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleAddTodo = (
+    todo: Omit<Todo, "id" | "createdAt" | "updatedAt">
+  ) => {
     addTodo(todo);
     setShowForm(false);
   };
@@ -33,52 +42,39 @@ export const App = () => {
   };
 
   const filteredAndSortedTodos = todos
-    .filter(todo => filterCompleted === null || todo.completed === filterCompleted)
+    .filter(
+      (todo) => filterCompleted === null || todo.completed === filterCompleted
+    )
     .sort((a: Todo, b: Todo) => {
       const dateA = new Date(a.createdAt).getTime();
       const dateB = new Date(b.createdAt).getTime();
-      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
     });
 
   return (
-    <Canvas camera={{ position: [0, 0, 15], fov: 75 }}>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} />
-      <OrbitControls enableZoom={false} />
-
-      {/* Основной контейнер */}
-      <group position={[0, 0, 0]}>
-        {/* Хедер с кнопками управления */}
-        <Header
-          width={LIST_WIDTH}
-          height={LIST_HEIGHT}
-          onAddClick={() => setShowForm(true)}
-          onSortClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
-          onFilterClick={() => setFilterCompleted(prev => prev === null ? true : prev === true ? false : null)}
-          sortOrder={sortOrder}
-          filterCompleted={filterCompleted}
-        />
-
-        {/* Список задач */}
-        <TaskList
-          todos={filteredAndSortedTodos}
-          onToggle={handleToggleTodo}
-          width={LIST_WIDTH}
-          height={LIST_HEIGHT}
-          itemHeight={ITEM_HEIGHT}
-        />
-
-        {/* Форма добавления задачи */}
-        {showForm && (
-          <TaskForm
-            position={[0, 0, 1]}
-            width={LIST_WIDTH}
-            height={FORM_HEIGHT / 2}
-            onSubmit={handleAddTodo}
-            onCancel={() => setShowForm(false)}
-          />
-        )}
-      </group>
+    <Canvas
+      style={{ position: "absolute", inset: "0", touchAction: "none" }}
+      gl={{ localClippingEnabled: true }}
+    >
+      <OrbitControls />
+      <Defaults>
+        <Root
+          backgroundColor="#f0f1f3"
+          sizeX={10}
+          sizeY={7}
+          flexDirection="column"
+          borderRadius={24}
+          padding={15}
+        >
+          <DialogAnchor>
+            <AlertDialog>
+              <Modal/>
+              <Header />
+              <TaskList todos={todos} />
+            </AlertDialog>
+          </DialogAnchor>
+        </Root>
+      </Defaults>
     </Canvas>
   );
 };

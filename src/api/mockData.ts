@@ -26,7 +26,72 @@ let todos: Todo[] = [
     updatedAt: '2024-03-20T12:00:00Z',
     priority: 'low',
   },
+  {
+    id: '4',
+    title: 'Изучить React Hooks',
+    completed: false,
+    createdAt: '2024-03-20T13:00:00Z',
+    updatedAt: '2024-03-20T13:00:00Z',
+    priority: 'medium',
+  },
+  {
+    id: '5',
+    title: 'Поработать с Redux',
+    completed: true,
+    createdAt: '2024-03-20T14:00:00Z',
+    updatedAt: '2024-03-20T14:30:00Z',
+    priority: 'high',
+  },
+  {
+    id: '6',
+    title: 'Прочитать книгу по JavaScript',
+    completed: false,
+    createdAt: '2024-03-20T15:00:00Z',
+    updatedAt: '2024-03-20T15:00:00Z',
+    priority: 'low',
+  },
+  {
+    id: '7',
+    title: 'Реализовать чат на WebSocket',
+    completed: true,
+    createdAt: '2024-03-20T16:00:00Z',
+    updatedAt: '2024-03-20T16:45:00Z',
+    priority: 'medium',
+  },
+  {
+    id: '8',
+    title: 'Изучить TypeScript',
+    completed: false,
+    createdAt: '2024-03-20T17:00:00Z',
+    updatedAt: '2024-03-20T17:00:00Z',
+    priority: 'high',
+  },
+  {
+    id: '9',
+    title: 'Изучить основы CSS',
+    completed: true,
+    createdAt: '2024-03-20T18:00:00Z',
+    updatedAt: '2024-03-20T18:30:00Z',
+    priority: 'low',
+  },
+  {
+    id: '10',
+    title: 'Сделать сайт для портфолио',
+    completed: false,
+    createdAt: '2024-03-20T19:00:00Z',
+    updatedAt: '2024-03-20T19:00:00Z',
+    priority: 'high',
+  },
+  {
+    id: '11',
+    title: 'Разобраться в Docker',
+    completed: false,
+    createdAt: '2024-03-20T20:00:00Z',
+    updatedAt: '2024-03-20T20:00:00Z',
+    priority: 'medium',
+  }
 ];
+
 
 export const mockApi = {
   getTodos: async () => {

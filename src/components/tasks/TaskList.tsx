@@ -1,43 +1,27 @@
-import { useRef, useMemo } from 'react';
-import { TaskItem } from './TaskItem';
-import { Todo } from '../../types/Todo';
-import * as THREE from 'three';
+import { TaskItem } from "./TaskItem";
+import { Todo } from "../../types/Todo";
+import { Container } from "@react-three/uikit";
 
 interface TaskListProps {
   todos: Todo[];
-  onToggle: (id: string, completed: boolean) => void;
-  width: number;
-  height: number;
-  itemHeight: number;
 }
 
-export const TaskList = ({
-  todos,
-  onToggle,
-  width,
-  height,
-  itemHeight,
-}: TaskListProps) => {
-  const containerRef = useRef<THREE.Group>(null);
-  
-  // Оптимизация: вычисляем только видимые элементы
-  const visibleItems = useMemo(() => {
-    const startIndex = 0; // В реальном приложении это будет зависеть от скролла
-    const visibleCount = Math.ceil(height / itemHeight);
-    return todos.slice(startIndex, startIndex + visibleCount);
-  }, [todos, height, itemHeight]);
-
+export const TaskList = ({ todos }: TaskListProps) => {
   return (
-    <group ref={containerRef}>
-      {visibleItems.map((todo, index) => (
-        <TaskItem
-          key={todo.id}
-          todo={todo}
-          position={[0, -index * itemHeight, 0]}
-          onToggle={onToggle}
-          width={width}
-        />
+    <Container
+      backgroundColor="red"
+      width="100%"
+      height={630} // Фиксированная высота
+      flexDirection="column"
+      marginTop={20}
+      overflow="scroll" // Автоматическая прокрутка, если контент выходит за границы
+      borderRadius={18}
+      paddingX={10}
+      paddingY={5}
+    >
+      {todos.map((el, index) => (
+        <TaskItem key={el.id} todo={el} rowIndex={index} />
       ))}
-    </group>
+    </Container>
   );
-}; 
+};
