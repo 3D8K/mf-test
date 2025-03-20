@@ -47,7 +47,7 @@ export const Input = ({
       {/* Фон поля ввода */}
       <mesh
         onClick={() => setIsFocused(true)}
-        geometry={new THREE.PlaneGeometry(width, height)}
+        geometry={new THREE.BoxGeometry(width, height, 0.1)}
         material={new THREE.MeshStandardMaterial({
           color: isFocused ? '#e3f2fd' : '#ffffff',
           side: THREE.DoubleSide,
@@ -56,7 +56,7 @@ export const Input = ({
 
       {/* Рамка */}
       <mesh
-        geometry={new THREE.PlaneGeometry(width + 0.1, height + 0.1)}
+        geometry={new THREE.BoxGeometry(width + 0.1, height + 0.1, 0.15)}
         material={new THREE.MeshBasicMaterial({
           color: isFocused ? '#2196f3' : '#bdbdbd',
           side: THREE.DoubleSide,
@@ -67,7 +67,7 @@ export const Input = ({
 
       {/* Текст */}
       <Text
-        position={[-width / 2 + 0.2, 0, 0.1]}
+        position={[-width / 2 + 0.2, 0, 0.12]}
         fontSize={fontSize}
         color={value ? '#000000' : '#757575'}
         maxWidth={width - 0.4}
@@ -79,9 +79,9 @@ export const Input = ({
 
       {/* Курсор */}
       {isFocused && (
-        <mesh position={[-width / 2 + 0.2 + (value.length * fontSize * 0.6), 0, 0.2]}>
-          <planeGeometry args={[0.1, height * 0.8]} />
-          <meshBasicMaterial color="#2196f3" />
+        <mesh position={[-width / 2 + 0.4 + (value.length * fontSize * 0.6), 0, 0.15]}>
+          <boxGeometry args={[0.1, height * 0.8, 0.1]} />
+          <meshStandardMaterial color="#2196f3" />
         </mesh>
       )}
     </group>

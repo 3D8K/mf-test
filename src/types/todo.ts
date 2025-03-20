@@ -16,15 +16,15 @@
 // Body: { ids: string[], action: 'complete' | 'delete' | 'update', data?: any }
 // Response: { success: boolean, updated: Todo[] }
 
+export type Priority = 'low' | 'medium' | 'high';
+
 export interface Todo {
   id: string;
   title: string;
   completed: boolean;
   createdAt: string;
   updatedAt: string;
+  priority: Priority;
 }
 
-export type TodoUpdateData = {
-  completed?: boolean;
-  title?: string;
-};
+export type TodoUpdateData = Partial<Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>>;

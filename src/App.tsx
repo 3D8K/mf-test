@@ -10,6 +10,7 @@ import { useStore } from './store/store';
 const LIST_WIDTH = 10;
 const LIST_HEIGHT = 8;
 const ITEM_HEIGHT = 1;
+const FORM_HEIGHT = 10;
 
 export const App = () => {
   const [showForm, setShowForm] = useState(false);
@@ -72,7 +73,7 @@ export const App = () => {
           <TaskForm
             position={[0, 0, 1]}
             width={LIST_WIDTH}
-            height={LIST_HEIGHT / 2}
+            height={FORM_HEIGHT / 2}
             onSubmit={handleAddTodo}
             onCancel={() => setShowForm(false)}
           />
