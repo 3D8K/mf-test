@@ -1,9 +1,9 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { useState, useEffect } from 'react';
-import { TaskList } from './components/TaskList';
-import { TaskForm } from './components/TaskForm';
-import { Header } from './components/Header';
+import { TaskList } from './components/tasks/TaskList';
+import { TaskForm } from './components/forms/TaskForm';
+import { Header } from './components/layout/Header';
 import { Todo } from './types/Todo';
 import { useStore } from './store/store';
 

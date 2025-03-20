@@ -1,6 +1,6 @@
 import { Text } from '@react-three/drei';
-import { Checkbox } from './Checkbox';
-import { Todo } from '../types/Todo';
+import { Checkbox } from '../ui/Checkbox';
+import { Todo } from '../../types/todo';
 
 interface TaskItemProps {
   todo: Todo;

@@ -1,6 +1,6 @@
 import { useRef, useMemo } from 'react';
 import { TaskItem } from './TaskItem';
-import { Todo } from '../types/Todo';
+import { Todo } from '../../types/Todo';
 import * as THREE from 'three';
 
 interface TaskListProps {

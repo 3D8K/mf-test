@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Text } from '@react-three/drei';
-import { Button } from './Button';
-import { Checkbox } from './Checkbox';
-import { Input } from './Input';
-import { Todo } from '../types/Todo';
+import { Button } from '../ui/Button';
+import { Checkbox } from '../ui/Checkbox';
+import { Input } from '../ui/Input';
+import { Todo } from '../../types/Todo';
 import * as THREE from 'three';
 
 interface TaskFormProps {
