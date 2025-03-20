@@ -3,6 +3,7 @@ import { Todo } from '../../types/Todo';
 import { Checkbox } from '@react-three/uikit-default';
 import Tag from '../ui/Tag';
 import { useMemo } from 'react';
+import { useStore } from '../../store/store';
 
 interface TaskItemProps {
   todo: Todo;
@@ -25,23 +26,45 @@ const TITLE_CONTAINER_STYLES = {
 } as const;
 
 const DATE_CONTAINER_STYLES = {
-  width: 120,
+  width: 150,
   flexShrink: 0,
 } as const;
 
+const DATE_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+} as const;
+
 export const TaskItem = ({ todo, rowIndex }: TaskItemProps) => {
+  const { toggleTodo } = useStore();
+
   const formattedDate = useMemo(() => {
-    if (!todo.createdAt) return 'Неизвестно';
-    return new Date(todo.createdAt).toLocaleDateString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
+    if (!todo.createdAt) return 'Unknown';
+    
+    const date = new Date(todo.createdAt);
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    
+    return new Intl.DateTimeFormat('en-US', {
+      ...DATE_FORMAT_OPTIONS,
+      timeZone: userTimezone,
+    }).format(date);
   }, [todo.createdAt]);
 
   const backgroundColor = useMemo(() => 
     rowIndex % 2 === 0 ? '#f9fafb' : '#ffffff'
   , [rowIndex]);
+
+  const handleToggle = async (checked: boolean) => {
+    try {
+      await toggleTodo(todo.id, checked);
+    } catch (error) {
+      console.error('Failed to toggle todo:', error);
+    }
+  };
 
   return (
     <Container
@@ -50,7 +73,7 @@ export const TaskItem = ({ todo, rowIndex }: TaskItemProps) => {
     >
       <Checkbox 
         checked={todo.completed} 
-        onCheckedChange={() => {}} // TODO: Добавить обработчик изменения статуса
+        onCheckedChange={handleToggle}
       />
 
       <Container {...TITLE_CONTAINER_STYLES}>

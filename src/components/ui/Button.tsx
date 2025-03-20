@@ -1,59 +1,104 @@
-import React from 'react';
-import { Button as ButtonComponent, ButtonProperties } from '@react-three/uikit-default';
-import { Icon, Text, IconProperties } from '@react-three/uikit';
+import { Button as ButtonComponent } from '@react-three/uikit-default';
+import { Text } from '@react-three/uikit';
+import { ReactNode } from 'react';
 
-// Определяем типы для пропсов
-type ButtonSize = "default" | "sm" | "lg" | "icon";
+type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonVariant = 'default' | 'outline' | 'ghost';
-type ButtonColor = string;
-type ButtonRadius = number | undefined;
-type ButtonPadding = number | undefined;
+type ButtonType = 'primary' | 'cancel' | 'submit';
 
-type IconType = React.ElementType<IconProperties>;
-
-interface UniversalButtonProps extends ButtonProperties {
-  onClick?: () => void; // Функция нажатия
-  icon?: IconType; // Иконка как компонент
-  iconProps?: IconProperties; // Пропсы для иконки
-  text?: string; // Текст кнопки
-  borderRadius?: ButtonRadius; // Закругление углов
-  variant?: ButtonVariant; // Вариант кнопки
+interface IconProps {
+  width: number;
+  height: number;
+  text: string;
   color?: string;
 }
 
-// Дефолтные значения
-const DEFAULT_SIZE: ButtonSize = 'sm';
-const DEFAULT_COLOR: ButtonColor = '#edeef1';
-const DEFAULT_RADIUS: ButtonRadius = 4;
-const DEFAULT_VARIANT: ButtonVariant = 'outline';
-const DEFAULT_PADDING: ButtonPadding = 1;
+interface ButtonProps {
+  children?: ReactNode;
+  onClick?: () => void;
+  size?: ButtonSize;
+  variant?: ButtonVariant;
+  type?: ButtonType;
+  disabled?: boolean;
+  icon?: React.ElementType<IconProps>;
+  iconProps?: Partial<IconProps>;
+}
+
+const BUTTON_SIZES: Record<ButtonSize, { width: number; height: number; fontSize: number; iconSize: number }> = {
+  sm: { width: 16, height: 8, fontSize: 0.4, iconSize: 0.6 },
+  md: { width: 20, height: 10, fontSize: 0.5, iconSize: 0.8 },
+  lg: { width: 24, height: 12, fontSize: 0.6, iconSize: 1 },
+} as const;
+
+const TYPE_COLORS: Record<ButtonType, { bg: string; text: string }> = {
+  primary: {
+    bg: '#3b82f6',
+    text: '#ffffff',
+  },
+  submit: {
+    bg: '#22c55e',
+    text: '#ffffff',
+  },
+  cancel: {
+    bg: '#ef4444',
+    text: '#ffffff',
+  },
+} as const;
+
+const VARIANT_MODIFIERS: Record<ButtonVariant, (colors: typeof TYPE_COLORS[ButtonType]) => { bg: string; text: string }> = {
+  default: (colors) => colors,
+  outline: (colors) => ({
+    bg: 'transparent',
+    text: colors.bg,
+  }),
+  ghost: (colors) => ({
+    bg: 'transparent',
+    text: colors.bg,
+  }),
+} as const;
 
 export function Button({
-  size = DEFAULT_SIZE,
-  color = DEFAULT_COLOR,
+  children,
   onClick,
-  icon: IconComponent,
-  text,
-  borderRadius = DEFAULT_RADIUS,
-  variant = DEFAULT_VARIANT,
-  padding = DEFAULT_PADDING,
+  size = 'md',
+  variant = 'default',
+  type = 'primary',
+  disabled = false,
+  icon: Icon,
   iconProps = {},
-  ...props
-}: UniversalButtonProps) {
+}: ButtonProps) {
+  const sizeStyles = BUTTON_SIZES[size];
+  const typeColors = TYPE_COLORS[type];
+  const colors = VARIANT_MODIFIERS[variant](typeColors);
+  const textColor = disabled ? '#9ca3af' : colors.text;
+
   return (
     <ButtonComponent
-      size={size}
-      backgroundColor={color}
-     width={20}
-     height={20}
-      borderRadius={borderRadius}
-      padding={padding}
-      variant={variant}
-      onClick={onClick}
-      {...props}
+      onClick={disabled ? undefined : onClick}
+      backgroundColor={colors.bg}
+      flexDirection="row"
+      gap={2}
+      alignItems="center"
+      justifyContent="center"
+      {...sizeStyles}
     >
-      {IconComponent && <IconComponent {...iconProps} />}
-      {text && <Text>{text}</Text>}
+      {Icon && (
+        <Icon
+          {...iconProps}
+          color={textColor}
+          width={sizeStyles.iconSize * 20}
+          height={sizeStyles.iconSize * 20}
+          text=""
+        />
+      )}
+      {typeof children === 'string' && (
+        <Text
+          color={textColor}
+          fontSize={sizeStyles.fontSize}
+        >
+          {children}
+        </Text>
+      )}
     </ButtonComponent>
   );
 }

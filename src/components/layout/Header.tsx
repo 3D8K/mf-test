@@ -11,23 +11,29 @@ const BUTTON_ICON_PROPS = {
   text: "",
 } as const;
 
+const CONTAINER_STYLES = {
+  width: "100%",
+  flexDirection: "row" as const,
+  justifyContent: "space-between" as const,
+  alignItems: "center" as const,
+  paddingY: 10,
+} as const;
+
+const ADD_BUTTON_STYLES = {
+  variant: "ghost" as const,
+  size: "sm" as const,
+} as const;
+
 export const Header = () => {
   const { setSortOrder, sortOrder } = useStore();
 
   return (
-    <Container
-      width="auto"
-      flexDirection="row"
-      justifyContent="space-between"
-      alignItems="center"
-      paddingY={10}
-    >
+    <Container {...CONTAINER_STYLES}>
       <AlertDialogTrigger>
         <Button 
           icon={Plus} 
           iconProps={BUTTON_ICON_PROPS}
-          variant="ghost"
-          size="sm"
+          {...ADD_BUTTON_STYLES}
         />
       </AlertDialogTrigger>
       

@@ -30,6 +30,7 @@ export const TodoFilters = ({ todos, onFilterChange }: TodoFiltersProps) => {
     <Container
       flexDirection="row"
       gap={10}
+      justifyContent={"space-between"}
       marginBottom={10}
     >
       <Button

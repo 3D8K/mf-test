@@ -8,22 +8,39 @@ const BUTTON_ICON_PROPS = {
   text: "",
 } as const;
 
+const COLORS = {
+  active: "#000000",
+  inactive: "#9ca3af",
+} as const;
+
+const CONTAINER_STYLES = {
+  flexDirection: "row" as const,
+  gap: 1,
+  width: 80,
+  justifyContent: "flex-end" as const,
+} as const;
+
 interface SortButtonsProps {
   sortOrder: "asc" | "desc";
   onSortChange: (order: "asc" | "desc") => void;
 }
 
 export const SortButtons = ({ sortOrder, onSortChange }: SortButtonsProps) => {
+  const getIconProps = (isActive: boolean) => ({
+    ...BUTTON_ICON_PROPS,
+    color: isActive ? COLORS.active : COLORS.inactive,
+  });
+
   return (
-    <Container flexDirection="row" gap={1}>
+    <Container {...CONTAINER_STYLES}>
       <Button
         icon={ArrowUpWideNarrow}
-        iconProps={BUTTON_ICON_PROPS}
+        iconProps={getIconProps(sortOrder === "asc")}
         onClick={() => onSortChange("asc")}
       />
       <Button
         icon={ArrowDownWideNarrow}
-        iconProps={BUTTON_ICON_PROPS}
+        iconProps={getIconProps(sortOrder === "desc")}
         onClick={() => onSortChange("desc")}
       />
     </Container>
