@@ -48,8 +48,14 @@ export const useStore = create<TodoStore>((set, get) => ({
   },
 
   toggleTodo: async (id, completed) => {
+    const previousTodos = get().todos;
     try {
-      set({ isLoading: true, error: null });
+      set((state) => ({
+        todos: state.todos.map((todo) =>
+          todo.id === id ? { ...todo, completed } : todo
+        ),
+      }));
+      
       const updatedTodo = await api.updateTodo(id, { completed });
       set((state) => ({
         todos: state.todos.map((todo) =>
@@ -57,10 +63,8 @@ export const useStore = create<TodoStore>((set, get) => ({
         ),
       }));
     } catch (error) {
-      set({ error: 'Error updating task' });
+      set({ todos: previousTodos, error: 'Error updating task' });
       throw error;
-    } finally {
-      set({ isLoading: false });
     }
   },
 

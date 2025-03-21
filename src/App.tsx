@@ -8,7 +8,8 @@ export const App = () => {
   return (
     <Canvas
       style={APP_CANVAS_STYLES}
-      gl={{ localClippingEnabled: true }}
+      gl={{ localClippingEnabled: true,     powerPreference: "high-performance",
+      }}
     >
       <OrbitControls 
         enableZoom={false}
