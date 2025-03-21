@@ -65,7 +65,7 @@ export const mockApi = {
       throw new Error('Title must be less than 100 characters');
     }
     const newTodo: Todo = {
-      id: String(Date.now()),
+      id: generateId(),
       title,
       completed: false,
       createdAt: new Date().toISOString(),

@@ -1,13 +1,7 @@
 import { Button as ButtonComponent } from '@react-three/uikit-default';
 import { Text } from '@react-three/uikit';
 import { ReactNode, useState } from 'react';
-import { 
-  BUTTON_SIZES, 
-  BUTTON_TYPE_COLORS, 
-  BUTTON_VARIANT_MODIFIERS,
-  BUTTON_CONTAINER_STYLES,
-  COLORS 
-} from '../../utils/styles';
+import { BUTTON_STYLES, COLORS } from '../../styles';
 
 type ButtonSize = 'sm' | 'md' | 'lg' | 'icon' | 'modal';
 type ButtonVariant = 'default' | 'outline' | 'ghost';
@@ -46,6 +40,8 @@ interface ButtonProps {
   containerStyles?: ButtonContainerStyles;
 }
 
+const DEFAULT_CONTAINER_STYLES = BUTTON_STYLES.container.default;
+
 export function Button({
   children,
   onClick,
@@ -59,9 +55,9 @@ export function Button({
   containerStyles,
 }: ButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const sizeStyles = BUTTON_SIZES[size];
-  const typeColors = BUTTON_TYPE_COLORS[type];
-  const colors = BUTTON_VARIANT_MODIFIERS[variant](typeColors);
+  const sizeStyles = BUTTON_STYLES.sizes[size];
+  const typeColors = BUTTON_STYLES.typeColors[type];
+  const colors = BUTTON_STYLES.variants[variant](typeColors);
   
   const getColor = () => {
     if (disabled) return COLORS.text.disabled;
@@ -76,26 +72,28 @@ export function Button({
   };
 
   const iconSize = size === 'icon' ? 16 : (sizeStyles.iconSize * 15);
+  const color = getColor();
 
   return (
     <ButtonComponent
       onClick={disabled ? undefined : onClick}
       backgroundColor={getBackgroundColor()}
-      {...(containerStyles || BUTTON_CONTAINER_STYLES)}
+      {...(containerStyles || DEFAULT_CONTAINER_STYLES)}
       {...sizeStyles}
       onPointerEnter={() => setIsHovered(true)}
       onPointerLeave={() => setIsHovered(false)}
     >
-      {Icon ? (
+      {Icon && (
         <Icon
           {...iconProps}
-          color={getColor()}
+          color={color}
           width={iconProps.width || iconSize}
           height={iconProps.height || iconSize}
         />
-      ) : (
+      )}
+      {children && (
         <Text
-          color={getColor()}
+          color={color}
           fontSize={containerStyles?.fontSize || sizeStyles.fontSize}
         >
           {children}

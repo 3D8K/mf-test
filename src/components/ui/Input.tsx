@@ -1,5 +1,5 @@
 import { Input as InputComponent } from "@react-three/uikit-default";
-import { INPUT_STYLES } from "../../utils/styles";
+import { INPUT_STYLES } from "../../styles";
 
 interface InputProps {
   value?: string;

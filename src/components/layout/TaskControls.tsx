@@ -1,43 +1,11 @@
-import { Container, Text } from "@react-three/uikit";
+import { Container } from "@react-three/uikit";
 import { Button } from "../ui/Button";
 import { ArrowUpWideNarrow, ArrowDownWideNarrow, Filter } from "@react-three/uikit-lucide";
-
-const BUTTON_STYLES = {
-  variant: "ghost" as const,
-  size: "icon" as const,
-} as const;
-
-const BUTTON_ICON_PROPS = {
-  width: 26,
-  height: 26,
-} as const;
-
-const COLORS = {
-  active: "#000000",
-  inactive: "#9ca3af",
-} as const;
-
-const CONTAINER_STYLES = {
-  flexDirection: "row" as const,
-  gap: 3,
-  width: 220,
-  justifyContent: "flex-end" as const,
-  alignItems: "center" as const,
-} as const;
-
-const FILTER_BUTTON_STYLES = {
-  ...BUTTON_STYLES,
-  containerStyles: {
-    gap: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 0.5,
-  }
-} as const;
+import { TASK_CONTROLS_STYLES } from "../../styles";
 
 type FilterStatus = 'all' | 'completed' | 'in progress';
 
-interface TableControlsProps {
+interface TaskControlsProps {
   sortOrder: "asc" | "desc";
   onSortChange: (order: "asc" | "desc") => void;
   filterStatus: FilterStatus;
@@ -55,15 +23,15 @@ const getFilterLabel = (status: FilterStatus) => {
   }
 };
 
-export const TableControls = ({ 
+export const TaskControls = ({ 
   sortOrder, 
   onSortChange,
   filterStatus,
   onFilterChange
-}: TableControlsProps) => {
-  const getIconProps = (isActive: boolean) => ({
-    ...BUTTON_ICON_PROPS,
-    color: isActive ? COLORS.active : COLORS.inactive,
+}: TaskControlsProps) => {
+  const getIconProps = (isActive: boolean, isFilter = false) => ({
+    ...(isFilter ? TASK_CONTROLS_STYLES.buttonIcon.filter : TASK_CONTROLS_STYLES.buttonIcon.default),
+    color: isActive ? TASK_CONTROLS_STYLES.colors.active : TASK_CONTROLS_STYLES.colors.inactive,
   });
 
   const handleFilterClick = () => {
@@ -74,31 +42,29 @@ export const TableControls = ({
   };
 
   return (
-    <Container {...CONTAINER_STYLES}>
+    <Container {...TASK_CONTROLS_STYLES.container}>
       <Button
-        {...FILTER_BUTTON_STYLES}
+        {...TASK_CONTROLS_STYLES.filterButton}
         icon={Filter}
-        iconProps={getIconProps(filterStatus !== 'all')}
+        iconProps={getIconProps(filterStatus !== 'all', true)}
         onClick={handleFilterClick}
+        containerStyles={{
+          ...TASK_CONTROLS_STYLES.filterButton.containerStyles,
+          fontSize: 10,
+        }}
       >
-        <Text 
-          color={filterStatus !== 'all' ? COLORS.active : COLORS.inactive}
-          fontSize={0.8}
-          marginLeft={1}
-        >
-          {getFilterLabel(filterStatus)}
-        </Text>
+        {getFilterLabel(filterStatus)}
       </Button>
 
       <Button
-        {...BUTTON_STYLES}
+        {...TASK_CONTROLS_STYLES.button}
         icon={ArrowUpWideNarrow}
         iconProps={getIconProps(sortOrder === "asc")}
         onClick={() => onSortChange("asc")}
         active={sortOrder === "asc"}
       />
       <Button
-        {...BUTTON_STYLES}
+        {...TASK_CONTROLS_STYLES.button}
         icon={ArrowDownWideNarrow}
         iconProps={getIconProps(sortOrder === "desc")}
         onClick={() => onSortChange("desc")}

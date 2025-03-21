@@ -5,10 +5,10 @@ import { TaskList } from "../tasks/TaskList";
 import Modal from "../modal/Modal";
 import { useStore } from "../../store/store";
 import { useEffect } from "react";
-import { APP_CONTENT_STYLES } from "../../utils/styles";
+import { APP_CONTENT_STYLES } from "../../styles";
 
 export const AppContent = () => {
-  const { todos, fetchTodos } = useStore();
+  const { fetchTodos } = useStore();
 
   useEffect(() => {
     fetchTodos();
@@ -20,7 +20,7 @@ export const AppContent = () => {
         <Dialog>
           <Modal />
           <Header />
-          <TaskList todos={todos} />
+          <TaskList />
         </Dialog>
       </DialogAnchor>
     </Root>

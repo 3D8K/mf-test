@@ -1,7 +1,7 @@
 import { Badge } from '@react-three/uikit-default';
 import { Text } from '@react-three/uikit';
 import { Priority } from "../../types/Todo";
-import { TAG_COLORS } from "../../utils/styles";
+import { TAG_COLORS } from "../../styles";
 
 interface TagProps {
   priority: Priority;

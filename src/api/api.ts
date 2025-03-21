@@ -6,7 +6,6 @@ interface GetTodosParams {
   filterCompleted?: boolean | null;
 }
 
-// В реальном приложении здесь будет реальный API
 export const api = {
   getTodos: (params: GetTodosParams) => todoApi.getTodos(params),
   createTodo: (data: { title: string; priority: Priority }) => todoApi.createTodo(data),

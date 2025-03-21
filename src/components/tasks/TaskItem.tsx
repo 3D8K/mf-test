@@ -5,7 +5,7 @@ import { Todo } from '../../types';
 import { useStore } from '../../store/store';
 import Tag from '../ui/Tag';
 import { formatDate } from '../../utils/date';
-import { TASK_ITEM_STYLES, COLORS } from '../../utils/styles';
+import { TASK_ITEM_STYLES, COLORS } from '../../styles';
 
 interface TaskItemProps {
   todo: Todo;

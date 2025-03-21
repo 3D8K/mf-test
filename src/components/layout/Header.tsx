@@ -2,26 +2,9 @@ import { Container } from "@react-three/uikit";
 import { Button } from "../ui/Button";
 import { Plus } from "@react-three/uikit-lucide";
 import { DialogTrigger } from "@react-three/uikit-default";
-import { TableControls } from "./SortButtons";
+import { TaskControls } from "./TaskControls";
 import { useStore } from "../../store/store";
-
-const BUTTON_ICON_PROPS = {
-  width: 26,
-  height: 26,
-} as const;
-
-const CONTAINER_STYLES = {
-  width: "100%",
-  flexDirection: "row" as const,
-  justifyContent: "space-between" as const,
-  alignItems: "center" as const,
-  paddingY: 10,
-} as const;
-
-const ADD_BUTTON_STYLES = {
-  variant: "ghost" as const,
-  size: "icon" as const,
-} as const;
+import { HEADER_STYLES } from "../../styles";
 
 export const Header = () => {
   const { setSortOrder, sortOrder, filterCompleted, setFilterCompleted } = useStore();
@@ -45,16 +28,16 @@ export const Header = () => {
   };
 
   return (
-    <Container {...CONTAINER_STYLES}>
+    <Container {...HEADER_STYLES.container}>
       <DialogTrigger>
         <Button 
           icon={Plus} 
-          iconProps={BUTTON_ICON_PROPS}
-          {...ADD_BUTTON_STYLES}
+          iconProps={HEADER_STYLES.button.icon}
+          {...HEADER_STYLES.button.styles}
         />
       </DialogTrigger>
       
-      <TableControls 
+      <TaskControls 
         sortOrder={sortOrder} 
         onSortChange={setSortOrder}
         filterStatus={getCurrentFilterStatus()}

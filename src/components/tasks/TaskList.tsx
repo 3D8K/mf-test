@@ -4,21 +4,7 @@ import { Container, Text } from "@react-three/uikit";
 import { useMemo, memo } from "react";
 import { useStore } from "../../store/store";
 import { Loader } from "@react-three/uikit-lucide";
-import { 
-  EMPTY_STATE_STYLES, 
-  LOADER_STYLES, 
-  MESSAGE_STYLES,
-  TASK_LIST_STYLES,
-  COLORS 
-} from "../../utils/styles";
-
-const LOADER_CONTAINER_STYLES = {
-  flexDirection: "column" as const,
-  alignItems: "center" as const,
-  justifyContent: "center" as const,
-  gap: 2,
-  height: "100%",
-} as const;
+import { TASK_LIST_STYLES, COLORS } from "../../styles";
 
 const TaskListItem = memo(({ todo, index }: { todo: Todo; index: number }) => (
   <TaskItem 
@@ -34,12 +20,9 @@ export const TaskList = () => {
   const { todos, sortOrder, filterCompleted, isLoading } = useStore();
 
   const filteredAndSortedTodos = useMemo(() => {
-    // Фильтрация
     const filteredTodos = filterCompleted === null 
       ? todos 
       : todos.filter(todo => todo.completed === filterCompleted);
-
-    // Сортировка
     return filteredTodos.sort((a, b) => {
       const dateA = new Date(a.createdAt).getTime();
       const dateB = new Date(b.createdAt).getTime();
@@ -50,10 +33,10 @@ export const TaskList = () => {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <Container {...EMPTY_STATE_STYLES}>
-          <Container {...LOADER_CONTAINER_STYLES}>
-            <Loader {...LOADER_STYLES} />
-            <Text {...MESSAGE_STYLES}>Loading tasks...</Text>
+        <Container {...TASK_LIST_STYLES.emptyState}>
+          <Container {...TASK_LIST_STYLES.loader.container}>
+            <Loader {...TASK_LIST_STYLES.loader.icon} />
+            <Text {...TASK_LIST_STYLES.loader.message}>Loading tasks...</Text>
           </Container>
         </Container>
       );
@@ -65,8 +48,8 @@ export const TaskList = () => {
         : 'No tasks yet. Create your first task!';
 
       return (
-        <Container {...EMPTY_STATE_STYLES}>
-          <Text {...MESSAGE_STYLES}>{message}</Text>
+        <Container {...TASK_LIST_STYLES.emptyState}>
+          <Text {...TASK_LIST_STYLES.loader.message}>{message}</Text>
         </Container>
       );
     }
@@ -81,12 +64,7 @@ export const TaskList = () => {
   };
 
   return (
-    <Container
-      {...TASK_LIST_STYLES}
-      backgroundColor={COLORS.background.primary}
-      flexDirection="column"
-      overflow="scroll"
-    >
+    <Container {...TASK_LIST_STYLES.container}>
       {renderContent()}
     </Container>
   );

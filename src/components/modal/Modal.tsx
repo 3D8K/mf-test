@@ -4,7 +4,8 @@ import {
   DialogDescription,
   DialogFooter,
   DialogContent,
-  useDialogContext
+  useDialogContext,
+  DialogTrigger
 } from "@react-three/uikit-default";
 import { Text } from "@react-three/uikit";
 import Input from "../ui/Input";
@@ -13,15 +14,20 @@ import { Button } from "../ui/Button";
 import { useState, useMemo } from "react";
 import { Priority } from "../../types";
 import { useStore } from "../../store/store";
-import { MODAL_STYLES } from "../../utils/styles";
+import { MODAL_STYLES } from "../../styles";
 
-export default function Modal() {
+const ModalContent = () => {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState<Priority>("low");
   const { addTodo } = useStore();
   const { setOpen } = useDialogContext();
 
   const isSubmitDisabled = useMemo(() => !title.trim(), [title]);
+
+  const resetForm = () => {
+    setTitle("");
+    setPriority("low");
+  };
 
   const handleSubmit = () => {
     if (isSubmitDisabled) return;
@@ -31,13 +37,10 @@ export default function Modal() {
       priority,
     });
 
-    // Reset form
-    setTitle("");
-    setPriority("low");
-    
-    // Close modal
+    resetForm();
     setOpen(false);
   };
+  
 
   return (
     <DialogContent maxWidth={500}>
@@ -68,5 +71,13 @@ export default function Modal() {
           </Button>
       </DialogFooter>
     </DialogContent>
+  );
+};
+
+export default function Modal() {
+  return (
+    <DialogTrigger>
+      <ModalContent />
+    </DialogTrigger>
   );
 }
