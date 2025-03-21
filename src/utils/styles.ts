@@ -151,4 +151,25 @@ export const APP_CONTENT_STYLES = {
   flexDirection: "column" as const,
   borderRadius: 24,
   padding: 15,
+} as const;
+
+export const MODAL_STYLES = {
+  button: {
+    size: "md" as const,
+  },
+  icon: {
+    width: 15,
+    height: 15,
+    text: "",
+  },
+  priority: {
+    selected: {
+      backgroundColor: "#3b82f622",
+      borderColor: "#3b82f6",
+    },
+    default: {
+      backgroundColor: "transparent",
+      borderColor: "#9ca3af",
+    },
+  },
 } as const; 

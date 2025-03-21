@@ -1,6 +1,6 @@
 // src/api/mockData.ts
 import { Todo, TodoCreateInput, BatchAction } from '../types';
-import { delay } from '../utils/api';
+import { delay } from './utils';
 
 let todos: Todo[] = [
   {
