@@ -1,6 +1,6 @@
 import { Button as ButtonComponent } from '@react-three/uikit-default';
 import { Text } from '@react-three/uikit';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useMemo, useCallback, memo } from 'react';
 import { BUTTON_STYLES, COLORS } from '../../styles';
 
 type ButtonSize = 'sm' | 'md' | 'lg' | 'icon' | 'modal';
@@ -17,7 +17,7 @@ interface ButtonContainerStyles {
   flexDirection?: 'row';
   gap?: number;
   alignItems?: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline' | 'space-between' | 'space-around' | 'space-evenly';
-  justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+  justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
   padding?: number;
   cursor?: 'pointer';
   transition?: string;
@@ -42,7 +42,35 @@ interface ButtonProps {
 
 const DEFAULT_CONTAINER_STYLES = BUTTON_STYLES.container.default;
 
-export function Button({
+const getButtonColors = (
+  type: ButtonType,
+  variant: ButtonVariant,
+  disabled: boolean,
+  active: boolean,
+  isHovered: boolean
+) => {
+  const typeColors = BUTTON_STYLES.typeColors[type];
+  const colors = BUTTON_STYLES.variants[variant](typeColors);
+
+  return {
+    text: disabled 
+      ? COLORS.text.disabled 
+      : active 
+        ? colors.hover.text 
+        : isHovered 
+          ? colors.hover.text 
+          : colors.text,
+    background: disabled 
+      ? "#e5e7eb" 
+      : active 
+        ? colors.hover.bg 
+        : isHovered 
+          ? colors.hover.bg 
+          : colors.bg
+  };
+};
+
+export const Button = memo(function Button({
   children,
   onClick,
   size = 'md',
@@ -55,50 +83,58 @@ export function Button({
   containerStyles,
 }: ButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const sizeStyles = BUTTON_STYLES.sizes[size];
-  const typeColors = BUTTON_STYLES.typeColors[type];
-  const colors = BUTTON_STYLES.variants[variant](typeColors);
   
-  const getColor = () => {
-    if (disabled) return COLORS.text.disabled;
-    if (active) return colors.hover.text;
-    return isHovered ? colors.hover.text : colors.text;
-  };
+  const sizeStyles = useMemo(() => BUTTON_STYLES.sizes[size], [size]);
+  const colors = useMemo(() => 
+    getButtonColors(type, variant, disabled, active, isHovered),
+    [type, variant, disabled, active, isHovered]
+  );
+  
+  const iconSize = useMemo(() => 
+    size === 'icon' ? 16 : (sizeStyles.iconSize * 15),
+    [size, sizeStyles.iconSize]
+  );
 
-  const getBackgroundColor = () => {
-    if (disabled) return `${colors.bg}50`;
-    if (active) return colors.hover.bg;
-    return isHovered ? colors.hover.bg : colors.bg;
-  };
+  const handlePointerEnter = useCallback(() => setIsHovered(true), []);
+  const handlePointerLeave = useCallback(() => setIsHovered(false), []);
+  const handleClick = useCallback(() => {
+    if (!disabled && onClick) {
+      onClick();
+    }
+  }, [disabled, onClick]);
 
-  const iconSize = size === 'icon' ? 16 : (sizeStyles.iconSize * 15);
-  const color = getColor();
+  const containerStyle = useMemo(() => 
+    containerStyles || DEFAULT_CONTAINER_STYLES,
+    [containerStyles]
+  );
+
+  const textStyle = useMemo(() => ({
+    color: colors.text,
+    fontSize: containerStyles?.fontSize || sizeStyles.fontSize
+  }), [colors.text, containerStyles?.fontSize, sizeStyles.fontSize]);
 
   return (
     <ButtonComponent
-      onClick={disabled ? undefined : onClick}
-      backgroundColor={getBackgroundColor()}
-      {...(containerStyles || DEFAULT_CONTAINER_STYLES)}
+      onClick={handleClick}
+      backgroundColor={colors.background}
+      {...containerStyle}
       {...sizeStyles}
-      onPointerEnter={() => setIsHovered(true)}
-      onPointerLeave={() => setIsHovered(false)}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
     >
       {Icon && (
         <Icon
           {...iconProps}
-          color={color}
+          color={colors.text}
           width={iconProps.width || iconSize}
           height={iconProps.height || iconSize}
         />
       )}
       {children && (
-        <Text
-          color={color}
-          fontSize={containerStyles?.fontSize || sizeStyles.fontSize}
-        >
+        <Text {...textStyle}>
           {children}
         </Text>
       )}
     </ButtonComponent>
   );
-}
+});

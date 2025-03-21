@@ -1,17 +1,16 @@
 export const COLORS = {
   text: {
-    primary: "#1f2937",
+    primary: "#111827",
     secondary: "#6b7280",
     disabled: "#9ca3af",
   },
   background: {
     primary: "#ffffff",
-    secondary: "#f9fafb",
-    transparent: "transparent",
     alternate: {
       even: "#f9fafb",
-      odd: "#ffffff",
+      odd: "#f3f4f6",
     },
+    transparent: "#ffffff",
   },
   accent: {
     blue: "#3b82f6",
@@ -29,6 +28,16 @@ export const TAG_COLORS = {
 export const INPUT_STYLES = {
   width: "100%",
   maxWidth: 600,
+  error: {
+    text: {
+      color: COLORS.accent.red,
+      fontSize: 12,
+      marginTop: 4,
+      positionType: "absolute",
+      bottom: -20,
+      left: 0,
+    }
+  }
 } as const;
 
 export const EMPTY_STATE_STYLES = {

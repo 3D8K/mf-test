@@ -15,6 +15,7 @@ import { useState, useMemo } from "react";
 import { Priority } from "../../types";
 import { useStore } from "../../store/store";
 import { MODAL_STYLES } from "../../styles";
+import { MAX_TITLE_LENGTH } from "../../utils/constants";
 
 const ModalContent = () => {
   const [title, setTitle] = useState("");
@@ -22,7 +23,10 @@ const ModalContent = () => {
   const { addTodo } = useStore();
   const { setOpen } = useDialogContext();
 
-  const isSubmitDisabled = useMemo(() => !title.trim(), [title]);
+  const isSubmitDisabled = useMemo(() => {
+    const trimmedTitle = title.trim();
+    return !trimmedTitle || trimmedTitle.length > MAX_TITLE_LENGTH;
+  }, [title]);
 
   const resetForm = () => {
     setTitle("");
@@ -53,6 +57,8 @@ const ModalContent = () => {
             value={title}
             onChange={setTitle}
             placeholder="Enter task title"
+            maxLength={MAX_TITLE_LENGTH}
+            errorMessage={`Task title cannot exceed ${MAX_TITLE_LENGTH} characters`}
           />
           <TagSwitcher 
             selectedTag={priority}

@@ -1,3 +1,5 @@
+import { COLORS } from './common';
+
 export const MODAL_STYLES = {
   button: {
     size: "modal" as const,
@@ -10,11 +12,11 @@ export const MODAL_STYLES = {
   },
   priority: {
     selected: {
-      backgroundColor: "#3b82f622",
-      borderColor: "#3b82f6",
+      backgroundColor: "#e0e7ff",
+      borderColor: COLORS.accent.blue,
     },
     default: {
-      backgroundColor: "transparent",
+      backgroundColor: COLORS.background.transparent,
       borderColor: "#9ca3af",
     },
   },

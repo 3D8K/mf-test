@@ -41,7 +41,7 @@ export const BUTTON_VARIANT_MODIFIERS = {
     bg: COLORS.background.transparent,
     text: colors.bg,
     hover: {
-      bg: `${colors.bg}10`,
+      bg: "#e0e7ff",
       text: colors.hover.bg,
     }
   }),
@@ -49,7 +49,7 @@ export const BUTTON_VARIANT_MODIFIERS = {
     bg: COLORS.background.transparent,
     text: colors.bg,
     hover: {
-      bg: `${colors.bg}10`,
+      bg: "#e0e7ff",
       text: colors.hover.bg,
     }
   }),
