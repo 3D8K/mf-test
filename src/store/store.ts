@@ -1,21 +1,8 @@
 import { create } from 'zustand';
-import { Todo } from '../types/Todo';
+import { TodoStore, Todo, TodoCreateInput } from '../types';
 import { api } from '../api/api';
 
-interface TodoStore {
-  todos: Todo[];
-  isLoading: boolean;
-  error: string | null;
-  sortOrder: "asc" | "desc";
-  filterCompleted: boolean | null;
-  setSortOrder: (order: "asc" | "desc") => void;
-  setFilterCompleted: (completed: boolean | null) => void;
-  addTodo: (todo: Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
-  toggleTodo: (id: string, completed: boolean) => Promise<void>;
-  fetchTodos: () => Promise<void>;
-}
-
-export const useStore = create<TodoStore>((set, get) => ({
+export const useStore = create<TodoStore>((set) => ({
   todos: [],
   isLoading: false,
   error: null,
@@ -37,7 +24,7 @@ export const useStore = create<TodoStore>((set, get) => ({
     }
   },
 
-  addTodo: async (todo) => {
+  addTodo: async (todo: TodoCreateInput) => {
     try {
       set({ isLoading: true, error: null });
       const newTodo = await api.createTodo(todo);
@@ -61,6 +48,21 @@ export const useStore = create<TodoStore>((set, get) => ({
       }));
     } catch (error) {
       set({ error: 'Error updating task' });
+      throw error;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  batchUpdate: async (ids, action, data) => {
+    try {
+      set({ isLoading: true, error: null });
+      const result = await api.batchUpdate(ids, action, data);
+      if (result.success) {
+        set({ todos: result.updated });
+      }
+    } catch (error) {
+      set({ error: 'Error updating tasks' });
       throw error;
     } finally {
       set({ isLoading: false });

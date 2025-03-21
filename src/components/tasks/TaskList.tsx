@@ -4,6 +4,8 @@ import { Container, Text } from "@react-three/uikit";
 import { useMemo } from "react";
 import { useStore } from "../../store/store";
 import { Loader } from "@react-three/uikit-lucide";
+import { EMPTY_STATE_STYLES, LOADER_STYLES, MESSAGE_STYLES } from "../../utils/styles";
+import { sortTodosByDate } from "../../utils/sort";
 
 interface TaskListProps {
   todos: Todo[];
@@ -18,34 +20,11 @@ const CONTAINER_STYLES = {
   paddingY: 5,
 } as const;
 
-const EMPTY_STATE_STYLES = {
-  width: "100%",
-  height: "100%",
-  justifyContent: "center",
-  alignItems: "center",
-} as const;
-
-const LOADER_STYLES = {
-  width: 30,
-  height: 30,
-  color: "#6b7280",
-} as const;
-
-const MESSAGE_STYLES = {
-  fontSize: 1,
-  color: "#6b7280",
-  marginTop: 10,
-} as const;
-
 export const TaskList = ({ todos }: TaskListProps) => {
   const { sortOrder, isLoading } = useStore();
 
   const sortedTodos = useMemo(() => 
-    [...todos].sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-    }),
+    sortTodosByDate(todos, sortOrder),
     [todos, sortOrder]
   );
 

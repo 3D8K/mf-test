@@ -1,7 +1,6 @@
 // src/api/mockData.ts
-import { Todo } from '../types/Todo';
-
-const delay = () => new Promise(resolve => setTimeout(resolve, 500));
+import { Todo, TodoCreateInput, BatchAction } from '../types';
+import { delay } from '../utils/api';
 
 let todos: Todo[] = [
   {
@@ -94,14 +93,13 @@ let todos: Todo[] = [
   }
 ];
 
-
 export const mockApi = {
   getTodos: async () => {
     await delay();
     return { todos };
   },
 
-  createTodo: async (todo: Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>) => {
+  createTodo: async (todo: TodoCreateInput) => {
     await delay();
     const newTodo: Todo = {
       ...todo,
@@ -131,7 +129,7 @@ export const mockApi = {
     todos = todos.filter((todo) => todo.id !== id);
   },
 
-  batchUpdate: async (ids: string[], action: 'complete' | 'delete' | 'update', data?: Partial<Todo>) => {
+  batchUpdate: async (ids: string[], action: BatchAction, data?: Partial<Todo>) => {
     await delay();
     switch (action) {
       case 'complete':
@@ -145,11 +143,13 @@ export const mockApi = {
         todos = todos.filter((todo) => !ids.includes(todo.id));
         break;
       case 'update':
-        todos = todos.map((todo) =>
-          ids.includes(todo.id)
-            ? { ...todo, ...data, updatedAt: new Date().toISOString() }
-            : todo
-        );
+        if (data) {
+          todos = todos.map((todo) =>
+            ids.includes(todo.id)
+              ? { ...todo, ...data, updatedAt: new Date().toISOString() }
+              : todo
+          );
+        }
         break;
     }
     return { success: true, updated: todos };
