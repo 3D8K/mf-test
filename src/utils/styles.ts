@@ -40,10 +40,11 @@ export const COLORS = {
 } as const;
 
 export const BUTTON_SIZES = {
-  sm: { width: 20, height: 10, fontSize: 0.4, iconSize: 0.6 },
-  md: { width: 26, height: 13, fontSize: 0.5, iconSize: 0.7 },
-  lg: { width: 32, height: 16, fontSize: 0.6, iconSize: 0.9 },
-  icon: { width: 26, height: 26, fontSize: 0.5, iconSize: 1 },
+  sm: { width: 20, height: 10, fontSize: 13, iconSize: 0.6 },
+  md: { width: 26, height: 13, fontSize: 14, iconSize: 0.7 },
+  lg: { width: 32, height: 16, fontSize: 15, iconSize: 0.9 },
+  icon: { width: 26, height: 26, fontSize: 14, iconSize: 1 },
+  modal: { width: 100, height: 25, fontSize: 14, iconSize: 1.2 },
 } as const;
 
 export const BUTTON_TYPE_COLORS = {
@@ -178,9 +179,22 @@ export const APP_CONTENT_STYLES = {
   padding: 15,
 } as const;
 
+export const MODAL_BUTTON_CONTAINER_STYLES = {
+  flexDirection: "row" as const,
+  gap: 2,
+  alignItems: "center",
+  justifyContent: "center",
+  padding: 12,
+  cursor: "pointer",
+  transition: "all 0.2s",
+  width: 200,
+  height: 48,
+  borderRadius: 8,
+} as const;
+
 export const MODAL_STYLES = {
   button: {
-    size: "md" as const,
+    size: "modal" as const,
     variant: "default" as const,
     type: "submit" as const,
   },

@@ -9,7 +9,7 @@ import {
   COLORS 
 } from '../../utils/styles';
 
-type ButtonSize = 'sm' | 'md' | 'lg' | 'icon';
+type ButtonSize = 'sm' | 'md' | 'lg' | 'icon' | 'modal';
 type ButtonVariant = 'default' | 'outline' | 'ghost';
 type ButtonType = 'primary' | 'cancel' | 'submit';
 
@@ -17,6 +17,20 @@ interface IconProps {
   width?: number;
   height?: number;
   color?: string;
+}
+
+interface ButtonContainerStyles {
+  flexDirection?: 'row';
+  gap?: number;
+  alignItems?: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline' | 'space-between' | 'space-around' | 'space-evenly';
+  justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'space-between' | 'space-around' | 'space-evenly';
+  padding?: number;
+  cursor?: 'pointer';
+  transition?: string;
+  width?: number;
+  height?: number;
+  borderRadius?: number;
+  fontSize?: number;
 }
 
 interface ButtonProps {
@@ -29,6 +43,7 @@ interface ButtonProps {
   icon?: React.ElementType<IconProps>;
   iconProps?: Partial<IconProps>;
   active?: boolean;
+  containerStyles?: ButtonContainerStyles;
 }
 
 export function Button({
@@ -41,6 +56,7 @@ export function Button({
   icon: Icon,
   iconProps = {},
   active = false,
+  containerStyles,
 }: ButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
   const sizeStyles = BUTTON_SIZES[size];
@@ -65,7 +81,7 @@ export function Button({
     <ButtonComponent
       onClick={disabled ? undefined : onClick}
       backgroundColor={getBackgroundColor()}
-      {...BUTTON_CONTAINER_STYLES}
+      {...(containerStyles || BUTTON_CONTAINER_STYLES)}
       {...sizeStyles}
       onPointerEnter={() => setIsHovered(true)}
       onPointerLeave={() => setIsHovered(false)}
@@ -80,7 +96,7 @@ export function Button({
       ) : (
         <Text
           color={getColor()}
-          fontSize={sizeStyles.fontSize}
+          fontSize={containerStyles?.fontSize || sizeStyles.fontSize}
         >
           {children}
         </Text>

@@ -65,6 +65,7 @@ export default function Modal() {
             {...MODAL_STYLES.button}
             onClick={handleSubmit}
             disabled={isSubmitDisabled}
+            style={MODAL_STYLES.button.style}
           >
             Add task
           </Button>
