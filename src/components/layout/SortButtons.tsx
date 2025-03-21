@@ -2,10 +2,14 @@ import { Container } from "@react-three/uikit";
 import { Button } from "../ui/Button";
 import { ArrowUpWideNarrow, ArrowDownWideNarrow } from "@react-three/uikit-lucide";
 
+const BUTTON_STYLES = {
+  variant: "ghost" as const,
+  size: "icon" as const,
+} as const;
+
 const BUTTON_ICON_PROPS = {
-  svgWidth: 15,
-  svgHeight: 15,
-  text: "",
+  width: 20,
+  height: 20,
 } as const;
 
 const COLORS = {
@@ -15,8 +19,8 @@ const COLORS = {
 
 const CONTAINER_STYLES = {
   flexDirection: "row" as const,
-  gap: 1,
-  width: 80,
+  gap: 2,
+  width: 90,
   justifyContent: "flex-end" as const,
 } as const;
 
@@ -34,14 +38,18 @@ export const SortButtons = ({ sortOrder, onSortChange }: SortButtonsProps) => {
   return (
     <Container {...CONTAINER_STYLES}>
       <Button
+        {...BUTTON_STYLES}
         icon={ArrowUpWideNarrow}
         iconProps={getIconProps(sortOrder === "asc")}
         onClick={() => onSortChange("asc")}
+        active={sortOrder === "asc"}
       />
       <Button
+        {...BUTTON_STYLES}
         icon={ArrowDownWideNarrow}
         iconProps={getIconProps(sortOrder === "desc")}
         onClick={() => onSortChange("desc")}
+        active={sortOrder === "desc"}
       />
     </Container>
   );

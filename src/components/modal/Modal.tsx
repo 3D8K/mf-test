@@ -63,13 +63,10 @@ export default function Modal() {
       <DialogFooter>
           <Button 
             {...MODAL_STYLES.button}
-            type="submit"
             onClick={handleSubmit}
             disabled={isSubmitDisabled}
-            icon={Plus}
-            iconProps={MODAL_STYLES.icon}
           >
-            Add
+            Add task
           </Button>
       </DialogFooter>
     </DialogContent>

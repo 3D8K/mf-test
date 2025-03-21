@@ -40,35 +40,56 @@ export const COLORS = {
 } as const;
 
 export const BUTTON_SIZES = {
-  sm: { width: 16, height: 8, fontSize: 0.4, iconSize: 0.6 },
-  md: { width: 20, height: 10, fontSize: 0.5, iconSize: 0.8 },
-  lg: { width: 24, height: 12, fontSize: 0.6, iconSize: 1 },
+  sm: { width: 24, height: 12, fontSize: 0.5, iconSize: 0.7 },
+  md: { width: 32, height: 16, fontSize: 0.6, iconSize: 0.9 },
+  lg: { width: 40, height: 20, fontSize: 0.7, iconSize: 1.1 },
+  icon: { width: 16, height: 16, fontSize: 0.6, iconSize: 1 },
 } as const;
 
 export const BUTTON_TYPE_COLORS = {
   primary: {
     bg: COLORS.accent.blue,
     text: COLORS.background.primary,
+    hover: {
+      bg: "#2563eb",
+      text: COLORS.background.primary,
+    }
   },
   submit: {
     bg: COLORS.accent.green,
     text: COLORS.background.primary,
+    hover: {
+      bg: "#16a34a",
+      text: COLORS.background.primary,
+    }
   },
   cancel: {
     bg: COLORS.accent.red,
     text: COLORS.background.primary,
+    hover: {
+      bg: "#dc2626",
+      text: COLORS.background.primary,
+    }
   },
 } as const;
 
 export const BUTTON_VARIANT_MODIFIERS = {
-  default: (colors: { bg: string; text: string }) => colors,
-  outline: (colors: { bg: string; text: string }) => ({
+  default: (colors: { bg: string; text: string; hover: { bg: string; text: string } }) => colors,
+  outline: (colors: { bg: string; text: string; hover: { bg: string; text: string } }) => ({
     bg: COLORS.background.transparent,
     text: colors.bg,
+    hover: {
+      bg: `${colors.bg}10`,
+      text: colors.hover.bg,
+    }
   }),
-  ghost: (colors: { bg: string; text: string }) => ({
+  ghost: (colors: { bg: string; text: string; hover: { bg: string; text: string } }) => ({
     bg: COLORS.background.transparent,
     text: colors.bg,
+    hover: {
+      bg: `${colors.bg}10`,
+      text: colors.hover.bg,
+    }
   }),
 } as const;
 
@@ -128,6 +149,9 @@ export const BUTTON_CONTAINER_STYLES = {
   gap: 2,
   alignItems: "center",
   justifyContent: "center",
+  padding: 4,
+  cursor: "pointer",
+  transition: "all 0.2s",
 } as const;
 
 export const TASK_LIST_STYLES = {
@@ -157,11 +181,12 @@ export const APP_CONTENT_STYLES = {
 export const MODAL_STYLES = {
   button: {
     size: "md" as const,
+    variant: "default" as const,
+    type: "submit" as const,
   },
   icon: {
-    width: 15,
-    height: 15,
-    text: "",
+    svgWidth: 15,
+    svgHeight: 15,
   },
   priority: {
     selected: {
