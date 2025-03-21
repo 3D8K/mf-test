@@ -5,6 +5,7 @@ import { TaskList } from "../tasks/TaskList";
 import Modal from "../modal/Modal";
 import { useStore } from "../../store/store";
 import { useEffect } from "react";
+import { APP_CONTENT_STYLES } from "../../utils/styles";
 
 export const AppContent = () => {
   const { todos, fetchTodos } = useStore();
@@ -14,14 +15,7 @@ export const AppContent = () => {
   }, [fetchTodos]);
 
   return (
-    <Root
-      backgroundColor="#f0f1f3"
-      sizeX={10}
-      sizeY={7}
-      flexDirection="column"
-      borderRadius={24}
-      padding={15}
-    >
+    <Root {...APP_CONTENT_STYLES}>
       <DialogAnchor>
         <Dialog>
           <Modal />

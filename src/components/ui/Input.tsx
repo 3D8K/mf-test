@@ -1,10 +1,5 @@
 import { Input as InputComponent } from "@react-three/uikit-default";
-
-const INPUT_STYLES = {
-  width: "100%",
-  maxWidth: 600,
-  overflow: "hidden",
-} as const;
+import { INPUT_STYLES } from "../../utils/styles";
 
 interface InputProps {
   value?: string;
