@@ -1,7 +1,7 @@
 import { Container } from "@react-three/uikit";
 import { Button } from "../ui/Button";
 import { Plus } from "@react-three/uikit-lucide";
-import { AlertDialogTrigger } from "@react-three/uikit-default";
+import { DialogTrigger } from "@react-three/uikit-default";
 import { SortButtons } from "./SortButtons";
 import { useStore } from "../../store/store";
 
@@ -29,13 +29,13 @@ export const Header = () => {
 
   return (
     <Container {...CONTAINER_STYLES}>
-      <AlertDialogTrigger>
+      <DialogTrigger>
         <Button 
           icon={Plus} 
           iconProps={BUTTON_ICON_PROPS}
           {...ADD_BUTTON_STYLES}
         />
-      </AlertDialogTrigger>
+      </DialogTrigger>
       
       <SortButtons 
         sortOrder={sortOrder} 

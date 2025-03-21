@@ -31,7 +31,7 @@ export const useStore = create<TodoStore>((set, get) => ({
       const response = await api.getTodos();
       set({ todos: response.todos });
     } catch (error) {
-      set({ error: 'Ошибка при загрузке задач' });
+      set({ error: 'Error loading tasks' });
     } finally {
       set({ isLoading: false });
     }
@@ -43,7 +43,7 @@ export const useStore = create<TodoStore>((set, get) => ({
       const newTodo = await api.createTodo(todo);
       set((state) => ({ todos: [...state.todos, newTodo] }));
     } catch (error) {
-      set({ error: 'Ошибка при добавлении задачи' });
+      set({ error: 'Error adding task' });
       throw error;
     } finally {
       set({ isLoading: false });
@@ -60,7 +60,7 @@ export const useStore = create<TodoStore>((set, get) => ({
         ),
       }));
     } catch (error) {
-      set({ error: 'Ошибка при обновлении задачи' });
+      set({ error: 'Error updating task' });
       throw error;
     } finally {
       set({ isLoading: false });

@@ -1,5 +1,5 @@
 import { Root } from "@react-three/uikit";
-import { AlertDialog, DialogAnchor } from "@react-three/uikit-default";
+import { Dialog, DialogAnchor } from "@react-three/uikit-default";
 import { Header } from "./Header";
 import { TaskList } from "../tasks/TaskList";
 import Modal from "../modal/Modal";
@@ -23,11 +23,11 @@ export const AppContent = () => {
       padding={15}
     >
       <DialogAnchor>
-        <AlertDialog>
+        <Dialog>
           <Modal />
           <Header />
           <TaskList todos={todos} />
-        </AlertDialog>
+        </Dialog>
       </DialogAnchor>
     </Root>
   );

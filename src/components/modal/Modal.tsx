@@ -1,28 +1,19 @@
 import {
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogContent,
 } from "@react-three/uikit-default";
 import { Text } from "@react-three/uikit";
 import Input from "../ui/Input";
 import { TagSwitcher } from "./TagSwitcher";
-import { Container } from "@react-three/uikit";
 import { Button } from "../ui/Button";
 import { useState, useMemo } from "react";
 import { Priority } from "../../types/Todo";
 import { useStore } from "../../store/store";
-import { Plus, X } from "@react-three/uikit-lucide";
+import { Plus } from "@react-three/uikit-lucide";
 
-const FOOTER_STYLES = {
-  flexDirection: "row" as const,
-  gap: 10,
-  width: "100%",
-  justifyContent: "center",
-  alignContent: "center",
-  paddingY: 10,
-} as const;
 
 const BUTTON_STYLES = {
   size: "md" as const,
@@ -66,18 +57,13 @@ export default function Modal() {
     setPriority("low");
   };
 
-  const handleCancel = () => {
-    setTitle("");
-    setPriority("low");
-  };
-
   return (
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        <AlertDialogTitle>
+    <DialogContent maxWidth={500}>
+      <DialogHeader>
+        <DialogTitle>
           <Text>New Task</Text>
-        </AlertDialogTitle>
-        <AlertDialogDescription>
+        </DialogTitle>
+        <DialogDescription>
           <Input 
             value={title}
             onChange={setTitle}
@@ -88,20 +74,9 @@ export default function Modal() {
             onTagSelect={setPriority}
             styles={PRIORITY_STYLES}
           />
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
-        <Container {...FOOTER_STYLES}>
-          <Button 
-            {...BUTTON_STYLES}
-            variant="ghost"
-            type="cancel"
-            onClick={handleCancel}
-            icon={X}
-            iconProps={ICON_PROPS}
-          >
-            Cancel
-          </Button>
+        </DialogDescription>
+      </DialogHeader>
+      <DialogFooter>
           <Button 
             {...BUTTON_STYLES}
             type="submit"
@@ -111,9 +86,8 @@ export default function Modal() {
             iconProps={ICON_PROPS}
           >
             Add
-          </Button>
-        </Container>
-      </AlertDialogFooter>
-    </AlertDialogContent>
+            </Button>
+      </DialogFooter>
+    </DialogContent>
   );
 }

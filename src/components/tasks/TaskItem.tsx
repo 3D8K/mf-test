@@ -12,23 +12,46 @@ interface TaskItemProps {
 
 const CONTAINER_STYLES = {
   width: "100%",
-  height: "auto",
-  flexDirection: "row",
+  minHeight: 50,
+  flexDirection: "row" as const,
   alignItems: "center",
+  justifyContent: "space-between",
   paddingX: 15,
   paddingY: 10,
   gap: 10,
 } as const;
 
+const LEFT_SECTION_STYLES = {
+  flexDirection: "row" as const,
+  alignItems: "center",
+  gap: 10,
+  flex: 1,
+} as const;
+
 const TITLE_CONTAINER_STYLES = {
-  width: 300,
+  flex: 1,
+  maxWidth: 600,
+  paddingX: 10,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  flexWrap: "wrap" as const,
+} as const;
+
+const RIGHT_SECTION_STYLES = {
+  flexDirection: "row" as const,
+  alignItems: "center",
+  gap: 20,
+  width: "auto",
   flexShrink: 0,
 } as const;
 
 const DATE_CONTAINER_STYLES = {
   width: 150,
   flexShrink: 0,
+  justifyContent: "flex-end" as const,
+  alignItems: "flex-end" as const,
 } as const;
+
 
 const DATE_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
   day: '2-digit',
@@ -71,25 +94,33 @@ export const TaskItem = ({ todo, rowIndex }: TaskItemProps) => {
       {...CONTAINER_STYLES}
       backgroundColor={backgroundColor}
     >
-      <Checkbox 
-        checked={todo.completed} 
-        onCheckedChange={handleToggle}
-      />
+      <Container {...LEFT_SECTION_STYLES}>
+        <Checkbox 
+          checked={todo.completed} 
+          onCheckedChange={handleToggle}
+        />
 
-      <Container {...TITLE_CONTAINER_STYLES}>
-        <Text 
-          color="#1f2937"
-          opacity={todo.completed ? 0.5 : 1}
-        >
-          {todo.title}
-        </Text>
+        <Container {...TITLE_CONTAINER_STYLES}>
+          <Text 
+            color="#1f2937"
+            opacity={todo.completed ? 0.5 : 1}
+          >
+            {todo.title}
+          </Text>
+        </Container>
       </Container>
 
-      <Container {...DATE_CONTAINER_STYLES}>
-        <Text color="#6b7280">{formattedDate}</Text>
-      </Container>
+      <Container {...RIGHT_SECTION_STYLES}>
+        <Container {...DATE_CONTAINER_STYLES}>
+          <Text 
+            color="#6b7280"
+          >
+            {formattedDate}
+          </Text>
+        </Container>
 
-      <Tag priority={todo.priority} />
+        <Tag priority={todo.priority} />
+      </Container>
     </Container>
   );
 };

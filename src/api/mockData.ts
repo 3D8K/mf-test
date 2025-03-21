@@ -1,10 +1,12 @@
 // src/api/mockData.ts
 import { Todo } from '../types/Todo';
 
+const delay = () => new Promise(resolve => setTimeout(resolve, 500));
+
 let todos: Todo[] = [
   {
     id: '1',
-    title: 'Изучить Three.js',
+    title: 'Learn Three.js',
     completed: false,
     createdAt: '2024-03-20T10:00:00Z',
     updatedAt: '2024-03-20T10:00:00Z',
@@ -12,7 +14,7 @@ let todos: Todo[] = [
   },
   {
     id: '2',
-    title: 'Создать 3D компоненты',
+    title: 'Create 3D components',
     completed: true,
     createdAt: '2024-03-20T11:00:00Z',
     updatedAt: '2024-03-20T11:30:00Z',
@@ -20,7 +22,7 @@ let todos: Todo[] = [
   },
   {
     id: '3',
-    title: 'Настроить маршрутизацию',
+    title: 'Set up routing',
     completed: false,
     createdAt: '2024-03-20T12:00:00Z',
     updatedAt: '2024-03-20T12:00:00Z',
@@ -28,7 +30,7 @@ let todos: Todo[] = [
   },
   {
     id: '4',
-    title: 'Изучить React Hooks',
+    title: 'Learn React Hooks',
     completed: false,
     createdAt: '2024-03-20T13:00:00Z',
     updatedAt: '2024-03-20T13:00:00Z',
@@ -36,7 +38,7 @@ let todos: Todo[] = [
   },
   {
     id: '5',
-    title: 'Поработать с Redux',
+    title: 'Work with Redux',
     completed: true,
     createdAt: '2024-03-20T14:00:00Z',
     updatedAt: '2024-03-20T14:30:00Z',
@@ -44,7 +46,7 @@ let todos: Todo[] = [
   },
   {
     id: '6',
-    title: 'Прочитать книгу по JavaScript',
+    title: 'Read JavaScript book',
     completed: false,
     createdAt: '2024-03-20T15:00:00Z',
     updatedAt: '2024-03-20T15:00:00Z',
@@ -52,7 +54,7 @@ let todos: Todo[] = [
   },
   {
     id: '7',
-    title: 'Реализовать чат на WebSocket',
+    title: 'Implement WebSocket chat',
     completed: true,
     createdAt: '2024-03-20T16:00:00Z',
     updatedAt: '2024-03-20T16:45:00Z',
@@ -60,7 +62,7 @@ let todos: Todo[] = [
   },
   {
     id: '8',
-    title: 'Изучить TypeScript',
+    title: 'Learn TypeScript',
     completed: false,
     createdAt: '2024-03-20T17:00:00Z',
     updatedAt: '2024-03-20T17:00:00Z',
@@ -68,7 +70,7 @@ let todos: Todo[] = [
   },
   {
     id: '9',
-    title: 'Изучить основы CSS',
+    title: 'Learn CSS basics',
     completed: true,
     createdAt: '2024-03-20T18:00:00Z',
     updatedAt: '2024-03-20T18:30:00Z',
@@ -76,7 +78,7 @@ let todos: Todo[] = [
   },
   {
     id: '10',
-    title: 'Сделать сайт для портфолио',
+    title: 'Create portfolio website',
     completed: false,
     createdAt: '2024-03-20T19:00:00Z',
     updatedAt: '2024-03-20T19:00:00Z',
@@ -84,7 +86,7 @@ let todos: Todo[] = [
   },
   {
     id: '11',
-    title: 'Разобраться в Docker',
+    title: 'Learn Docker',
     completed: false,
     createdAt: '2024-03-20T20:00:00Z',
     updatedAt: '2024-03-20T20:00:00Z',
@@ -95,10 +97,12 @@ let todos: Todo[] = [
 
 export const mockApi = {
   getTodos: async () => {
+    await delay();
     return { todos };
   },
 
   createTodo: async (todo: Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>) => {
+    await delay();
     const newTodo: Todo = {
       ...todo,
       id: String(todos.length + 1),
@@ -110,6 +114,7 @@ export const mockApi = {
   },
 
   updateTodo: async (id: string, data: Partial<Todo>) => {
+    await delay();
     const todoIndex = todos.findIndex((todo) => todo.id === id);
     if (todoIndex === -1) throw new Error('Todo not found');
 
@@ -122,10 +127,12 @@ export const mockApi = {
   },
 
   deleteTodo: async (id: string) => {
+    await delay();
     todos = todos.filter((todo) => todo.id !== id);
   },
 
   batchUpdate: async (ids: string[], action: 'complete' | 'delete' | 'update', data?: Partial<Todo>) => {
+    await delay();
     switch (action) {
       case 'complete':
         todos = todos.map((todo) =>

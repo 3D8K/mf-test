@@ -38,7 +38,7 @@ export const TodoFilters = ({ todos, onFilterChange }: TodoFiltersProps) => {
         variant="outline"
         size="sm"
       >
-        {sortOrder === "asc" ? "По возрастанию" : "По убыванию"}
+        {sortOrder === "asc" ? "Ascending" : "Descending"}
       </Button>
 
       <Button
@@ -49,10 +49,10 @@ export const TodoFilters = ({ todos, onFilterChange }: TodoFiltersProps) => {
         size="sm"
       >
         {filterCompleted === null 
-          ? "Все" 
+          ? "All" 
           : filterCompleted 
-            ? "Завершенные" 
-            : "Незавершенные"
+            ? "Completed" 
+            : "Incomplete"
         }
       </Button>
     </Container>
