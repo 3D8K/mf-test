@@ -78,14 +78,12 @@ export function Button({
           height={iconProps.height || iconSize}
         />
       ) : (
-        children ? (
-          <Text
-            color={getColor()}
-            fontSize={sizeStyles.fontSize}
-          >
-            {children}
-          </Text>
-        ) : children
+        <Text
+          color={getColor()}
+          fontSize={sizeStyles.fontSize}
+        >
+          {children}
+        </Text>
       )}
     </ButtonComponent>
   );

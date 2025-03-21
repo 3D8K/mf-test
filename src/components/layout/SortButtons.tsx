@@ -8,8 +8,8 @@ const BUTTON_STYLES = {
 } as const;
 
 const BUTTON_ICON_PROPS = {
-  width: 20,
-  height: 20,
+  width: 26,
+  height: 26,
 } as const;
 
 const COLORS = {
@@ -19,8 +19,8 @@ const COLORS = {
 
 const CONTAINER_STYLES = {
   flexDirection: "row" as const,
-  gap: 2,
-  width: 90,
+  gap: 3,
+  width: 100,
   justifyContent: "flex-end" as const,
 } as const;
 

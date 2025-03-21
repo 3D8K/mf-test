@@ -40,10 +40,10 @@ export const COLORS = {
 } as const;
 
 export const BUTTON_SIZES = {
-  sm: { width: 24, height: 12, fontSize: 0.5, iconSize: 0.7 },
-  md: { width: 32, height: 16, fontSize: 0.6, iconSize: 0.9 },
-  lg: { width: 40, height: 20, fontSize: 0.7, iconSize: 1.1 },
-  icon: { width: 16, height: 16, fontSize: 0.6, iconSize: 1 },
+  sm: { width: 20, height: 10, fontSize: 0.4, iconSize: 0.6 },
+  md: { width: 26, height: 13, fontSize: 0.5, iconSize: 0.7 },
+  lg: { width: 32, height: 16, fontSize: 0.6, iconSize: 0.9 },
+  icon: { width: 26, height: 26, fontSize: 0.5, iconSize: 1 },
 } as const;
 
 export const BUTTON_TYPE_COLORS = {

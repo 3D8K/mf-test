@@ -4,11 +4,11 @@ import { Plus } from "@react-three/uikit-lucide";
 import { DialogTrigger } from "@react-three/uikit-default";
 import { SortButtons } from "./SortButtons";
 import { useStore } from "../../store/store";
+import { IconProps } from "@react-three/uikit-lucide";
 
 const BUTTON_ICON_PROPS = {
-  svgWidth: 15,
-  svgHeight: 15,
-  text: "",
+  width: 26,
+  height: 26,
 } as const;
 
 const CONTAINER_STYLES = {
@@ -21,7 +21,7 @@ const CONTAINER_STYLES = {
 
 const ADD_BUTTON_STYLES = {
   variant: "ghost" as const,
-  size: "sm" as const,
+  size: "icon" as const,
 } as const;
 
 export const Header = () => {
