@@ -14,12 +14,18 @@ export const useStore = create<TodoStore>((set, get) => ({
     get().fetchTodos();
   },
   
-  setFilterCompleted: (completed) => set({ filterCompleted: completed }),
+  setFilterCompleted: (completed) => {
+    set({ filterCompleted: completed });
+    get().fetchTodos();
+  },
 
   fetchTodos: async () => {
     try {
       set({ isLoading: true, error: null });
-      const response = await api.getTodos(get().sortOrder);
+      const response = await api.getTodos({
+        sortOrder: get().sortOrder,
+        filterCompleted: get().filterCompleted
+      });
       set({ todos: response.todos });
     } catch (error) {
       set({ error: 'Error loading tasks' });

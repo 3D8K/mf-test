@@ -1,66 +1,55 @@
 // src/api/mockData.ts
-import { Priority } from '../types';
+import { Todo, Priority } from '../types';
 
-let todos = [
+const delay = (ms = 200) => new Promise(resolve => setTimeout(resolve, ms));
+
+let todos: Todo[] = [
   {
     id: '1',
     title: 'Learn React',
     completed: false,
-    priority: 'high' as Priority,
-    createdAt: '2024-02-09T10:00:00.000Z',
-    updatedAt: '2024-02-09T10:00:00.000Z',
+    createdAt: new Date('2024-01-01').toISOString(),
+    priority: 'high' as Priority
   },
   {
     id: '2',
     title: 'Build a todo app',
     completed: true,
-    priority: 'medium' as Priority,
-    createdAt: '2024-02-09T11:00:00.000Z',
-    updatedAt: '2024-02-09T15:00:00.000Z',
+    createdAt: new Date('2024-01-02').toISOString(),
+    priority: 'medium' as Priority
   },
+  {
+    id: '3',
+    title: 'Write tests',
+    completed: false,
+    createdAt: new Date('2024-01-03').toISOString(),
+    priority: 'low' as Priority
+  }
 ];
-
-// Helper to simulate network delay
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Helper to generate IDs (simplified version of uuid)
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 // Mock API implementation
 export const mockApi = {
-  async getTodos(
-    params: { search?: string; status?: string; sortBy?: string; sortOrder?: 'asc' | 'desc' } = {}
-  ) {
-    await delay(200);
-
+  async getTodos({ sortOrder = 'desc', filterCompleted = null } = {}) {
+    await delay();
+    
     let filteredTodos = [...todos];
 
-    // Apply search filter
-    if (params.search) {
-      filteredTodos = filteredTodos.filter((todo) =>
-        todo.title.toLowerCase().includes(params.search!.toLowerCase())
-      );
-    }
-
-    // Apply status filter
-    if (params.status === 'completed') {
-      filteredTodos = filteredTodos.filter((todo) => todo.completed);
-    } else if (params.status === 'active') {
-      filteredTodos = filteredTodos.filter((todo) => !todo.completed);
+    // Apply completed filter
+    if (filterCompleted !== null) {
+      filteredTodos = filteredTodos.filter(todo => todo.completed === filterCompleted);
     }
 
     // Apply sorting
-    if (params.sortBy === 'createdAt') {
-      filteredTodos.sort((a, b) => {
-        const comparison = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        return params.sortOrder === 'asc' ? -comparison : comparison;
-      });
-    }
+    const sortedTodos = filteredTodos.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
 
-    return {
-      todos: filteredTodos,
-      total: filteredTodos.length,
-    };
+    return { todos: sortedTodos };
   },
 
   async getTodoById(id: string) {
@@ -70,75 +59,52 @@ export const mockApi = {
     return todo;
   },
 
-  async createTodo(data: { title: string; priority: Priority }) {
-    await delay(200);
-
-    if (!data.title) throw new Error('Title is required');
-    if (data.title.length > 100)
+  async createTodo({ title, priority }: { title: string; priority: Priority }) {
+    await delay();
+    if (title.length > 100) {
       throw new Error('Title must be less than 100 characters');
-
-    const newTodo = {
-      id: generateId(),
-      title: data.title,
-      priority: data.priority,
+    }
+    const newTodo: Todo = {
+      id: String(Date.now()),
+      title,
       completed: false,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      priority
     };
-
     todos = [...todos, newTodo];
     return newTodo;
   },
 
-  async updateTodo(
-    id: string,
-    updates: Partial<{ title: string; completed: boolean; priority: Priority }>
-  ) {
-    await delay(200);
-
-    const index = todos.findIndex((t) => t.id === id);
-    if (index === -1) throw new Error('Todo not found');
-
-    if (updates.title && updates.title.length > 100) {
-      throw new Error('Title must be less than 100 characters');
+  async updateTodo(id: string, updates: Partial<Todo>) {
+    await delay();
+    const todoIndex = todos.findIndex(todo => todo.id === id);
+    if (todoIndex === -1) {
+      throw new Error('Todo not found');
     }
-
-    const updatedTodo = {
-      ...todos[index],
-      ...updates,
-      updatedAt: new Date().toISOString(),
-    };
-
-    todos = todos.map((t) => (t.id === id ? updatedTodo : t));
+    const updatedTodo = { ...todos[todoIndex], ...updates };
+    todos = todos.map(todo => todo.id === id ? updatedTodo : todo);
     return updatedTodo;
   },
 
   async deleteTodo(id: string) {
-    await delay(200);
-
-    const exists = todos.some((t) => t.id === id);
-    if (!exists) throw new Error('Todo not found');
-
-    todos = todos.filter((t) => t.id !== id);
+    await delay();
+    const todoIndex = todos.findIndex(todo => todo.id === id);
+    if (todoIndex === -1) {
+      throw new Error('Todo not found');
+    }
+    todos = todos.filter(todo => todo.id !== id);
     return { success: true };
   },
 
   async batchUpdateTodos(ids: string[], action: 'complete' | 'delete') {
-    await delay(300);
-
-    if (action === 'complete') {
-      todos = todos.map((todo) =>
-        ids.includes(todo.id)
-          ? { ...todo, completed: true, updatedAt: new Date().toISOString() }
-          : todo
+    await delay();
+    if (action === 'delete') {
+      todos = todos.filter(todo => !ids.includes(todo.id));
+    } else if (action === 'complete') {
+      todos = todos.map(todo =>
+        ids.includes(todo.id) ? { ...todo, completed: true } : todo
       );
-    } else if (action === 'delete') {
-      todos = todos.filter((todo) => !ids.includes(todo.id));
     }
-
-    return {
-      success: true,
-      affected: ids.length,
-    };
-  },
+    return { success: true };
+  }
 };

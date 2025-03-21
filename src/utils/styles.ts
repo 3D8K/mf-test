@@ -3,6 +3,7 @@ export const EMPTY_STATE_STYLES = {
   height: "100%",
   justifyContent: "center",
   alignItems: "center",
+  gap: 2,
 } as const;
 
 export const LOADER_STYLES = {
@@ -12,7 +13,7 @@ export const LOADER_STYLES = {
 } as const;
 
 export const MESSAGE_STYLES = {
-  fontSize: 1,
+  fontSize: 20,
   color: "#6b7280",
   marginTop: 10,
 } as const;

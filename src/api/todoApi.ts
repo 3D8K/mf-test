@@ -1,7 +1,13 @@
 import { mockApi } from './mockData';
+import { Priority } from '../types';
+
+interface GetTodosParams {
+  sortOrder?: 'asc' | 'desc';
+  filterCompleted?: boolean | null;
+}
 
 export const todoApi = {
-  async getTodos(params = {}) {
+  async getTodos(params: GetTodosParams = {}) {
     try {
       return await mockApi.getTodos(params);
     } catch (error) {
@@ -9,9 +15,9 @@ export const todoApi = {
     }
   },
 
-  async createTodo(title: string) {
+  async createTodo(data: { title: string; priority: Priority }) {
     try {
-      return await mockApi.createTodo(title);
+      return await mockApi.createTodo(data);
     } catch (error) {
       if (error instanceof Error) throw error;
       throw new Error('Failed to create todo');
@@ -20,7 +26,7 @@ export const todoApi = {
 
   async updateTodo(
     id: string,
-    updates: Partial<{ title: string; completed: boolean }>
+    updates: Partial<{ title: string; completed: boolean; priority: Priority }>
   ) {
     try {
       return await mockApi.updateTodo(id, updates);

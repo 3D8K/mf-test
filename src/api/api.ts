@@ -1,14 +1,15 @@
-import { mockApi } from './mockData';
+import { todoApi } from './todoApi';
 import { Priority } from '../types';
+
+interface GetTodosParams {
+  sortOrder?: 'asc' | 'desc';
+  filterCompleted?: boolean | null;
+}
 
 // В реальном приложении здесь будет реальный API
 export const api = {
-  getTodos: (sortOrder?: 'asc' | 'desc') => 
-    mockApi.getTodos({ sortBy: 'createdAt', sortOrder }),
-  createTodo: (data: { title: string; priority: Priority }) => 
-    mockApi.createTodo(data),
-  updateTodo: (id: string, data: { completed?: boolean; priority?: Priority }) => 
-    mockApi.updateTodo(id, data),
-  batchUpdate: (ids: string[], action: 'complete' | 'delete') => 
-    mockApi.batchUpdateTodos(ids, action),
+  getTodos: (params: GetTodosParams) => todoApi.getTodos(params),
+  createTodo: (data: { title: string; priority: Priority }) => todoApi.createTodo(data),
+  updateTodo: todoApi.updateTodo,
+  batchUpdate: todoApi.batchUpdate,
 }; 

@@ -2,9 +2,8 @@ import { Container } from "@react-three/uikit";
 import { Button } from "../ui/Button";
 import { Plus } from "@react-three/uikit-lucide";
 import { DialogTrigger } from "@react-three/uikit-default";
-import { SortButtons } from "./SortButtons";
+import { TableControls } from "./SortButtons";
 import { useStore } from "../../store/store";
-import { IconProps } from "@react-three/uikit-lucide";
 
 const BUTTON_ICON_PROPS = {
   width: 26,
@@ -25,7 +24,25 @@ const ADD_BUTTON_STYLES = {
 } as const;
 
 export const Header = () => {
-  const { setSortOrder, sortOrder } = useStore();
+  const { setSortOrder, sortOrder, filterCompleted, setFilterCompleted } = useStore();
+
+  const handleFilterChange = (status: 'all' | 'completed' | 'in progress') => {
+    switch (status) {
+      case 'completed':
+        setFilterCompleted(true);
+        break;
+      case 'in progress':
+        setFilterCompleted(false);
+        break;
+      default:
+        setFilterCompleted(null);
+    }
+  };
+
+  const getCurrentFilterStatus = () => {
+    if (filterCompleted === null) return 'all';
+    return filterCompleted ? 'completed' : 'in progress';
+  };
 
   return (
     <Container {...CONTAINER_STYLES}>
@@ -37,9 +54,11 @@ export const Header = () => {
         />
       </DialogTrigger>
       
-      <SortButtons 
+      <TableControls 
         sortOrder={sortOrder} 
         onSortChange={setSortOrder}
+        filterStatus={getCurrentFilterStatus()}
+        onFilterChange={handleFilterChange}
       />
     </Container>
   );
