@@ -51,13 +51,13 @@ export const TaskItem = ({ todo, rowIndex }: TaskItemProps) => {
       </Container>
 
       <Container {...TASK_ITEM_STYLES.rightSection}>
+        <Tag priority={todo.priority} />
+        
         <Container {...TASK_ITEM_STYLES.dateContainer}>
           <Text color={COLORS.text.secondary}>
             {formattedDate}
           </Text>
         </Container>
-
-        <Tag priority={todo.priority} />
       </Container>
     </Container>
   );
