@@ -1,21 +1,25 @@
 import { create } from 'zustand';
-import { TodoStore, Todo, TodoCreateInput } from '../types';
+import { TodoStore } from '../types';
 import { api } from '../api/api';
 
-export const useStore = create<TodoStore>((set) => ({
+export const useStore = create<TodoStore>((set, get) => ({
   todos: [],
   isLoading: false,
   error: null,
   sortOrder: "desc",
   filterCompleted: null,
 
-  setSortOrder: (order) => set({ sortOrder: order }),
+  setSortOrder: (order) => {
+    set({ sortOrder: order });
+    get().fetchTodos();
+  },
+  
   setFilterCompleted: (completed) => set({ filterCompleted: completed }),
 
   fetchTodos: async () => {
     try {
       set({ isLoading: true, error: null });
-      const response = await api.getTodos();
+      const response = await api.getTodos(get().sortOrder);
       set({ todos: response.todos });
     } catch (error) {
       set({ error: 'Error loading tasks' });
@@ -24,7 +28,7 @@ export const useStore = create<TodoStore>((set) => ({
     }
   },
 
-  addTodo: async (todo: TodoCreateInput) => {
+  addTodo: async (todo) => {
     try {
       set({ isLoading: true, error: null });
       const newTodo = await api.createTodo(todo);
@@ -54,12 +58,24 @@ export const useStore = create<TodoStore>((set) => ({
     }
   },
 
-  batchUpdate: async (ids, action, data) => {
+  batchUpdate: async (ids, action) => {
     try {
       set({ isLoading: true, error: null });
-      const result = await api.batchUpdate(ids, action, data);
+      const result = await api.batchUpdate(ids, action);
       if (result.success) {
-        set({ todos: result.updated });
+        if (action === 'delete') {
+          set((state) => ({
+            todos: state.todos.filter((todo) => !ids.includes(todo.id))
+          }));
+        } else if (action === 'complete') {
+          set((state) => ({
+            todos: state.todos.map((todo) =>
+              ids.includes(todo.id)
+                ? { ...todo, completed: true }
+                : todo
+            )
+          }));
+        }
       }
     } catch (error) {
       set({ error: 'Error updating tasks' });

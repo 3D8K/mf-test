@@ -11,9 +11,8 @@ import Input from "../ui/Input";
 import { TagSwitcher } from "./TagSwitcher";
 import { Button } from "../ui/Button";
 import { useState, useMemo } from "react";
-import { Priority } from "../../types/Todo";
+import { Priority } from "../../types";
 import { useStore } from "../../store/store";
-import { Plus } from "@react-three/uikit-lucide";
 import { MODAL_STYLES } from "../../utils/styles";
 
 export default function Modal() {
@@ -29,7 +28,6 @@ export default function Modal() {
 
     addTodo({
       title: title.trim(),
-      completed: false,
       priority,
     });
 
@@ -65,7 +63,6 @@ export default function Modal() {
             {...MODAL_STYLES.button}
             onClick={handleSubmit}
             disabled={isSubmitDisabled}
-            style={MODAL_STYLES.button.style}
           >
             Add task
           </Button>
