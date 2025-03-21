@@ -103,7 +103,8 @@ export const TASK_ITEM_STYLES = {
   },
   titleContainer: {
     flex: 1,
-    maxWidth: 400,
+    maxWidth: 600,
+    overflow: "hidden",
     paddingX: 10,
     flexWrap: "wrap" as const,
   },

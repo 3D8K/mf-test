@@ -93,6 +93,13 @@ let todos: Todo[] = [
   }
 ];
 
+// Функция для генерации уникального ID
+const generateUniqueId = () => {
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 10000);
+  return `${timestamp}-${random}`;
+};
+
 export const mockApi = {
   getTodos: async () => {
     await delay();
@@ -103,11 +110,11 @@ export const mockApi = {
     await delay();
     const newTodo: Todo = {
       ...todo,
-      id: String(todos.length + 1),
+      id: generateUniqueId(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    todos.push(newTodo);
+    todos = [...todos, newTodo];
     return newTodo;
   },
 

@@ -1,7 +1,7 @@
 import { TaskItem } from "./TaskItem";
 import { Todo } from "../../types/Todo";
 import { Container, Text } from "@react-three/uikit";
-import { useMemo } from "react";
+import { useMemo, memo } from "react";
 import { useStore } from "../../store/store";
 import { Loader } from "@react-three/uikit-lucide";
 import { 
@@ -16,6 +16,16 @@ import { sortTodosByDate } from "../../utils/sort";
 interface TaskListProps {
   todos: Todo[];
 }
+
+const TaskListItem = memo(({ todo, index }: { todo: Todo; index: number }) => (
+  <TaskItem 
+    key={todo.id}
+    todo={todo} 
+    rowIndex={index} 
+  />
+));
+
+TaskListItem.displayName = 'TaskListItem';
 
 export const TaskList = ({ todos }: TaskListProps) => {
   const { sortOrder, isLoading } = useStore();
@@ -44,10 +54,10 @@ export const TaskList = ({ todos }: TaskListProps) => {
     }
 
     return sortedTodos.map((todo, index) => (
-      <TaskItem 
-        key={todo.id} 
+      <TaskListItem 
+        key={todo.id}
         todo={todo} 
-        rowIndex={index} 
+        index={index}
       />
     ));
   };
