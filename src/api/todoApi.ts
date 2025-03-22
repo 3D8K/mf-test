@@ -1,13 +1,12 @@
 import { mockApi } from './mockData';
-import { Priority } from '../types';
 
 interface GetTodosParams {
-  sortOrder?: 'asc' | 'desc';
-  filterCompleted?: boolean | null;
+  sortOrder?: string;
+  filterCompleted?: null;
 }
 
 export const todoApi = {
-  async getTodos(params: GetTodosParams = {}) {
+  async getTodos(params: GetTodosParams) {
     try {
       return await mockApi.getTodos(params);
     } catch {
@@ -15,7 +14,7 @@ export const todoApi = {
     }
   },
 
-  async createTodo(data: { title: string; priority: Priority }) {
+  async createTodo(data: { title: string }) {
     try {
       return await mockApi.createTodo(data);
     } catch {
@@ -23,10 +22,7 @@ export const todoApi = {
     }
   },
 
-  async updateTodo(
-    id: string,
-    updates: Partial<{ title: string; completed: boolean; priority: Priority }>
-  ) {
+  async updateTodo(id: string, updates: { completed: boolean }) {
     try {
       return await mockApi.updateTodo(id, updates);
     } catch {
@@ -46,7 +42,7 @@ export const todoApi = {
     try {
       return await mockApi.batchUpdateTodos(ids, action);
     } catch {
-      throw new Error('Failed to perform batch update');
+      throw new Error('Failed to batch update todos');
     }
   },
 };

@@ -19,12 +19,6 @@ export const COLORS = {
   },
 } as const;
 
-export const TAG_COLORS = {
-  low: { bg: "#dcfce7", text: "#166534" },
-  medium: { bg: "#fef9c3", text: "#854d0e" },
-  high: { bg: "#fee2e2", text: "#991b1b" },
-} as const;
-
 export const INPUT_STYLES = {
   width: "100%",
   maxWidth: 600,

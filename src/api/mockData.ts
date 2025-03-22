@@ -1,5 +1,5 @@
 // src/api/mockData.ts
-import { Todo, Priority } from '../types';
+import { Todo } from '../types';
 
 const delay = (ms = 200) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -52,7 +52,7 @@ export const mockApi = {
     return todo;
   },
 
-  async createTodo({ title, priority }: { title: string; priority: Priority }) {
+  async createTodo({ title }: { title: string }) {
     await delay();
     if (title.length > 100) {
       throw new Error('Title must be less than 100 characters');
@@ -62,7 +62,7 @@ export const mockApi = {
       title,
       completed: false,
       createdAt: new Date().toISOString(),
-      priority
+      updatedAt: new Date().toISOString(),
     };
     todos = [...todos, newTodo];
     return newTodo;
@@ -74,7 +74,11 @@ export const mockApi = {
     if (todoIndex === -1) {
       throw new Error('Todo not found');
     }
-    const updatedTodo = { ...todos[todoIndex], ...updates };
+    const updatedTodo = { 
+      ...todos[todoIndex], 
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
     todos = todos.map(todo => todo.id === id ? updatedTodo : todo);
     return updatedTodo;
   },
@@ -95,7 +99,9 @@ export const mockApi = {
       todos = todos.filter(todo => !ids.includes(todo.id));
     } else if (action === 'complete') {
       todos = todos.map(todo =>
-        ids.includes(todo.id) ? { ...todo, completed: true } : todo
+        ids.includes(todo.id) 
+          ? { ...todo, completed: true, updatedAt: new Date().toISOString() } 
+          : todo
       );
     }
     return { success: true };

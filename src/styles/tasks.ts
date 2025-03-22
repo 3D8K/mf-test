@@ -51,14 +51,7 @@ export const TASK_ITEM_STYLES = {
     overflow: "hidden" as const,
     textOverflow: "ellipsis" as const,
     textAlign: "center" as const,
-  },
-  tagContainer: {
-    width: 100,
-    flexShrink: 0,
-    justifyContent: "center" as const,
-    alignItems: "flex-end" as const,
-    height: "100%",
-  },
+  }
 } as const;
 
 export const TASK_LIST_STYLES = {

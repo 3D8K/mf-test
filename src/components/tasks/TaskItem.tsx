@@ -3,7 +3,6 @@ import { Checkbox } from '@react-three/uikit-default';
 import { useMemo } from 'react';
 import { Todo } from '../../types';
 import { useStore } from '../../store/store';
-import Tag from '../ui/Tag';
 import { formatDate } from '../../utils/date';
 import { TASK_ITEM_STYLES, COLORS } from '../../styles';
 
@@ -51,8 +50,6 @@ export const TaskItem = ({ todo, rowIndex }: TaskItemProps) => {
       </Container>
 
       <Container {...TASK_ITEM_STYLES.rightSection}>
-        <Tag priority={todo.priority} />
-        
         <Container {...TASK_ITEM_STYLES.dateContainer}>
           <Text color={COLORS.text.secondary}>
             {formattedDate}
