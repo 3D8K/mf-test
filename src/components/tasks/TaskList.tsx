@@ -17,8 +17,8 @@ const TaskListItem = memo(({ todo, index }: { todo: Todo; index: number }) => (
 TaskListItem.displayName = 'TaskListItem';
 
 export const TaskList = () => {
-  const { todos, sortOrder, filterCompleted, isLoading } = useStore();
-
+  const { todos, sortOrder, filterCompleted, isLoading, error } = useStore();
+  
   const filteredAndSortedTodos = useMemo(() => {
     const filteredTodos = filterCompleted === null 
       ? todos 
@@ -31,6 +31,14 @@ export const TaskList = () => {
   }, [todos, sortOrder, filterCompleted]);
 
   const renderContent = () => {
+    if (error) {
+      return (
+        <Container {...TASK_LIST_STYLES.emptyState}>
+          <Text {...TASK_LIST_STYLES.loader.message}>Error loading tasks. Please try again.</Text>
+        </Container>
+      );
+    }
+
     if (isLoading) {
       return (
         <Container {...TASK_LIST_STYLES.emptyState}>

@@ -1,9 +1,5 @@
 // src/api/mockData.ts
-import { Todo } from '../types';
-
-const delay = (ms = 200) => new Promise(resolve => setTimeout(resolve, ms));
-
-let todos: Todo[] = [
+let todos = [
   {
     id: '1',
     title: 'Learn React',
@@ -20,29 +16,47 @@ let todos: Todo[] = [
   },
 ];
 
+// Helper to simulate network delay
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 // Helper to generate IDs (simplified version of uuid)
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 // Mock API implementation
 export const mockApi = {
-  async getTodos({ sortOrder = 'desc', filterCompleted = null } = {}) {
-    await delay();
-    
+  async getTodos(
+    params: { search?: string; status?: string; sortBy?: string } = {}
+  ) {
+    await delay(200);
+
     let filteredTodos = [...todos];
 
-    // Apply completed filter
-    if (filterCompleted !== null) {
-      filteredTodos = filteredTodos.filter(todo => todo.completed === filterCompleted);
+    // Apply search filter
+    if (params.search) {
+      filteredTodos = filteredTodos.filter((todo) =>
+        todo.title.toLowerCase().includes(params.search!.toLowerCase())
+      );
+    }
+
+    // Apply status filter
+    if (params.status === 'completed') {
+      filteredTodos = filteredTodos.filter((todo) => todo.completed);
+    } else if (params.status === 'active') {
+      filteredTodos = filteredTodos.filter((todo) => !todo.completed);
     }
 
     // Apply sorting
-    const sortedTodos = filteredTodos.sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
-    });
+    if (params.sortBy === 'createdAt') {
+      filteredTodos.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+    }
 
-    return { todos: sortedTodos };
+    return {
+      todos: filteredTodos,
+      total: filteredTodos.length,
+    };
   },
 
   async getTodoById(id: string) {
@@ -52,58 +66,74 @@ export const mockApi = {
     return todo;
   },
 
-  async createTodo({ title }: { title: string }) {
-    await delay();
-    if (title.length > 100) {
+  async createTodo(title: string) {
+    await delay(200);
+
+    if (!title) throw new Error('Title is required');
+    if (title.length > 100)
       throw new Error('Title must be less than 100 characters');
-    }
-    const newTodo: Todo = {
+
+    const newTodo = {
       id: generateId(),
       title,
       completed: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
+
     todos = [...todos, newTodo];
     return newTodo;
   },
 
-  async updateTodo(id: string, updates: Partial<Todo>) {
-    await delay();
-    const todoIndex = todos.findIndex(todo => todo.id === id);
-    if (todoIndex === -1) {
-      throw new Error('Todo not found');
+  async updateTodo(
+    id: string,
+    updates: Partial<{ title: string; completed: boolean }>
+  ) {
+    await delay(200);
+
+    const index = todos.findIndex((t) => t.id === id);
+    if (index === -1) throw new Error('Todo not found');
+
+    if (updates.title && updates.title.length > 100) {
+      throw new Error('Title must be less than 100 characters');
     }
-    const updatedTodo = { 
-      ...todos[todoIndex], 
+
+    const updatedTodo = {
+      ...todos[index],
       ...updates,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
-    todos = todos.map(todo => todo.id === id ? updatedTodo : todo);
+
+    todos = todos.map((t) => (t.id === id ? updatedTodo : t));
     return updatedTodo;
   },
 
   async deleteTodo(id: string) {
-    await delay();
-    const todoIndex = todos.findIndex(todo => todo.id === id);
-    if (todoIndex === -1) {
-      throw new Error('Todo not found');
-    }
-    todos = todos.filter(todo => todo.id !== id);
+    await delay(200);
+
+    const exists = todos.some((t) => t.id === id);
+    if (!exists) throw new Error('Todo not found');
+
+    todos = todos.filter((t) => t.id !== id);
     return { success: true };
   },
 
   async batchUpdateTodos(ids: string[], action: 'complete' | 'delete') {
-    await delay();
-    if (action === 'delete') {
-      todos = todos.filter(todo => !ids.includes(todo.id));
-    } else if (action === 'complete') {
-      todos = todos.map(todo =>
-        ids.includes(todo.id) 
-          ? { ...todo, completed: true, updatedAt: new Date().toISOString() } 
+    await delay(300);
+
+    if (action === 'complete') {
+      todos = todos.map((todo) =>
+        ids.includes(todo.id)
+          ? { ...todo, completed: true, updatedAt: new Date().toISOString() }
           : todo
       );
+    } else if (action === 'delete') {
+      todos = todos.filter((todo) => !ids.includes(todo.id));
     }
-    return { success: true };
-  }
+
+    return {
+      success: true,
+      affected: ids.length,
+    };
+  },
 };

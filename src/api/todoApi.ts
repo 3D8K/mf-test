@@ -1,12 +1,8 @@
+import { Todo } from '../types';
 import { mockApi } from './mockData';
 
-interface GetTodosParams {
-  sortOrder?: string;
-  filterCompleted?: null;
-}
-
 export const todoApi = {
-  async getTodos(params: GetTodosParams) {
+  async getTodos(params = {}) {
     try {
       return await mockApi.getTodos(params);
     } catch {
@@ -14,18 +10,23 @@ export const todoApi = {
     }
   },
 
-  async createTodo(data: { title: string }) {
+  async createTodo(todo: Todo) {
     try {
-      return await mockApi.createTodo(data);
-    } catch {
+      return await mockApi.createTodo(todo.title);
+    } catch (error) {
+      if (error instanceof Error) throw error;
       throw new Error('Failed to create todo');
     }
   },
 
-  async updateTodo(id: string, updates: { completed: boolean }) {
+  async updateTodo(
+    id: string,
+    updates: Partial<{ title: string; completed: boolean }>
+  ) {
     try {
       return await mockApi.updateTodo(id, updates);
-    } catch {
+    } catch (error) {
+      if (error instanceof Error) throw error;
       throw new Error('Failed to update todo');
     }
   },
@@ -42,7 +43,7 @@ export const todoApi = {
     try {
       return await mockApi.batchUpdateTodos(ids, action);
     } catch {
-      throw new Error('Failed to batch update todos');
+      throw new Error('Failed to perform batch update');
     }
   },
 };
