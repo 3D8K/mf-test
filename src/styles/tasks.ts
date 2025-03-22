@@ -22,8 +22,9 @@ export const TASK_ITEM_STYLES = {
   titleContainer: {
     flex: 1,
     minWidth: 200,
-    maxWidth: 600,
-    overflow: "visible",
+    maxWidth: 700,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
     paddingX: 10,
     flexWrap: "wrap" as const,
     flexDirection: "column" as const,

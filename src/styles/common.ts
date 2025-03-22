@@ -26,9 +26,8 @@ export const INPUT_STYLES = {
     text: {
       color: COLORS.accent.red,
       fontSize: 12,
-      marginTop: 4,
+      marginTop: 40,
       positionType: "absolute",
-      bottom: -20,
       left: 0,
     }
   }
