@@ -2,6 +2,19 @@ import { create } from 'zustand';
 import { TodoStore } from '../types';
 import { api } from '../api/api';
 
+/**
+* Updated store for better structure
+* 
+* Why changed:
+* - Moved all logic inside the store to keep things clean.
+* - Now fetchTodos, addTodo, toggleTodo, etc., are all part of the store.
+* - When sorting or filtering changes, tasks reload automatically.
+* - Made error handling better.
+* 
+* What I would add:
+* - Use alert from @react-three/uikit to display errors messages.
+* - This way, users see notifications instead of just storing errors in state.
+*/
 export const useStore = create<TodoStore>((set, get) => ({
   todos: [],
   isLoading: false,
@@ -28,6 +41,7 @@ export const useStore = create<TodoStore>((set, get) => ({
       });
       set({ todos: response.todos });
     } catch (error) {
+      console.error(error);
       set({ error: 'Error loading tasks' });
     } finally {
       set({ isLoading: false });
