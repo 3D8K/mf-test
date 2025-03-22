@@ -8,22 +8,17 @@ let todos: Todo[] = [
     id: '1',
     title: 'Learn React',
     completed: false,
-    createdAt: new Date('2024-01-01').toISOString(),
-    priority: 'high' as Priority
+    createdAt: '2024-02-09T10:00:00.000Z',
+    updatedAt: '2024-02-09T10:00:00.000Z',
+    priority: 'low'
   },
   {
     id: '2',
     title: 'Build a todo app',
     completed: true,
-    createdAt: new Date('2024-01-02').toISOString(),
-    priority: 'medium' as Priority
-  },
-  {
-    id: '3',
-    title: 'Write tests',
-    completed: false,
-    createdAt: new Date('2024-01-03').toISOString(),
-    priority: 'low' as Priority
+    createdAt: '2024-02-09T11:00:00.000Z',
+    updatedAt: '2024-02-09T15:00:00.000Z',
+    priority: 'medium'
   }
 ];
 
@@ -69,6 +64,7 @@ export const mockApi = {
       title,
       completed: false,
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       priority
     };
     todos = [...todos, newTodo];
@@ -81,7 +77,11 @@ export const mockApi = {
     if (todoIndex === -1) {
       throw new Error('Todo not found');
     }
-    const updatedTodo = { ...todos[todoIndex], ...updates };
+    const updatedTodo = { 
+      ...todos[todoIndex], 
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
     todos = todos.map(todo => todo.id === id ? updatedTodo : todo);
     return updatedTodo;
   },
@@ -102,7 +102,9 @@ export const mockApi = {
       todos = todos.filter(todo => !ids.includes(todo.id));
     } else if (action === 'complete') {
       todos = todos.map(todo =>
-        ids.includes(todo.id) ? { ...todo, completed: true } : todo
+        ids.includes(todo.id) 
+        ? { ...todo, completed: true, updatedAt: new Date().toISOString() } 
+        : todo
       );
     }
     return { success: true };
