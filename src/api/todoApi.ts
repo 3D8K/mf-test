@@ -1,6 +1,20 @@
 import { Todo } from '../types';
 import { mockApi } from './mockData';
 
+/**
+ *  Updated API logic
+ * 
+ *  Why changed:
+ * - `createTodo` now takes a `Todo` object instead of just `title`, making it more flexible.
+ * - Standardized error handling: every method now wraps errors in `Error`.
+ * - More consistent structure across API methods.
+ * 
+ *  Purpose:
+ * - Easier to work with `createTodo`, since it accepts a full `Todo` object.
+ * - Unified approach to handling errors, making debugging easier.
+ * - Code is now cleaner and more structured.
+ */
+
 export const todoApi = {
   async getTodos(params = {}) {
     try {
