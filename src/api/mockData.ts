@@ -8,23 +8,16 @@ let todos: Todo[] = [
     id: '1',
     title: 'Learn React',
     completed: false,
-    createdAt: new Date('2024-01-01').toISOString(),
-    priority: 'high' as Priority
+    createdAt: '2024-02-09T10:00:00.000Z',
+    updatedAt: '2024-02-09T10:00:00.000Z',
   },
   {
     id: '2',
     title: 'Build a todo app',
     completed: true,
-    createdAt: new Date('2024-01-02').toISOString(),
-    priority: 'medium' as Priority
+    createdAt: '2024-02-09T11:00:00.000Z',
+    updatedAt: '2024-02-09T15:00:00.000Z',
   },
-  {
-    id: '3',
-    title: 'Write tests',
-    completed: false,
-    createdAt: new Date('2024-01-03').toISOString(),
-    priority: 'low' as Priority
-  }
 ];
 
 // Helper to generate IDs (simplified version of uuid)

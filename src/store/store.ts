@@ -27,7 +27,7 @@ export const useStore = create<TodoStore>((set, get) => ({
         filterCompleted: get().filterCompleted
       });
       set({ todos: response.todos });
-    } catch (error) {
+    } catch {
       set({ error: 'Error loading tasks' });
     } finally {
       set({ isLoading: false });

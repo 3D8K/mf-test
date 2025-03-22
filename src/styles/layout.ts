@@ -1,5 +1,3 @@
-import { COLORS } from './common';
-
 export const HEADER_STYLES = {
   button: {
     icon: {

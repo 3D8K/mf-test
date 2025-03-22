@@ -10,7 +10,7 @@ export const todoApi = {
   async getTodos(params: GetTodosParams = {}) {
     try {
       return await mockApi.getTodos(params);
-    } catch (error) {
+    } catch {
       throw new Error('Failed to fetch todos');
     }
   },
@@ -18,8 +18,7 @@ export const todoApi = {
   async createTodo(data: { title: string; priority: Priority }) {
     try {
       return await mockApi.createTodo(data);
-    } catch (error) {
-      if (error instanceof Error) throw error;
+    } catch {
       throw new Error('Failed to create todo');
     }
   },
@@ -30,8 +29,7 @@ export const todoApi = {
   ) {
     try {
       return await mockApi.updateTodo(id, updates);
-    } catch (error) {
-      if (error instanceof Error) throw error;
+    } catch {
       throw new Error('Failed to update todo');
     }
   },
@@ -39,7 +37,7 @@ export const todoApi = {
   async deleteTodo(id: string) {
     try {
       return await mockApi.deleteTodo(id);
-    } catch (error) {
+    } catch {
       throw new Error('Failed to delete todo');
     }
   },
@@ -47,7 +45,7 @@ export const todoApi = {
   async batchUpdate(ids: string[], action: 'complete' | 'delete') {
     try {
       return await mockApi.batchUpdateTodos(ids, action);
-    } catch (error) {
+    } catch {
       throw new Error('Failed to perform batch update');
     }
   },

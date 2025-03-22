@@ -4,7 +4,7 @@ import { Container, Text } from "@react-three/uikit";
 import { useMemo, memo } from "react";
 import { useStore } from "../../store/store";
 import { Loader } from "@react-three/uikit-lucide";
-import { TASK_LIST_STYLES, COLORS } from "../../styles";
+import { TASK_LIST_STYLES } from "../../styles";
 
 const TaskListItem = memo(({ todo, index }: { todo: Todo; index: number }) => (
   <TaskItem 
