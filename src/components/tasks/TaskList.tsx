@@ -4,7 +4,7 @@ import { Container, Text } from "@react-three/uikit";
 import { useMemo, memo } from "react";
 import { useStore } from "../../store/store";
 import { Loader } from "@react-three/uikit-lucide";
-import { TASK_LIST_STYLES, COLORS } from "../../styles";
+import { TASK_LIST_STYLES } from "../../styles";
 
 const TaskListItem = memo(({ todo, index }: { todo: Todo; index: number }) => (
   <TaskItem 
@@ -17,7 +17,8 @@ const TaskListItem = memo(({ todo, index }: { todo: Todo; index: number }) => (
 TaskListItem.displayName = 'TaskListItem';
 
 export const TaskList = () => {
-  const { todos, sortOrder, filterCompleted, isLoading } = useStore();
+  const { todos, sortOrder, filterCompleted, isLoading, error } = useStore();
+
 
   const filteredAndSortedTodos = useMemo(() => {
     const filteredTodos = filterCompleted === null 
@@ -31,6 +32,14 @@ export const TaskList = () => {
   }, [todos, sortOrder, filterCompleted]);
 
   const renderContent = () => {
+    if (error) {
+      return (
+        <Container {...TASK_LIST_STYLES.emptyState}>
+          <Text {...TASK_LIST_STYLES.loader.message}>Error loading tasks. Please try again.</Text>
+        </Container>
+      );
+    }
+
     if (isLoading) {
       return (
         <Container {...TASK_LIST_STYLES.emptyState}>

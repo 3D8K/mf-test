@@ -11,6 +11,7 @@ export const todoApi = {
     try {
       return await mockApi.getTodos(params);
     } catch (error) {
+      console.error(error);
       throw new Error('Failed to fetch todos');
     }
   },
@@ -40,14 +41,16 @@ export const todoApi = {
     try {
       return await mockApi.deleteTodo(id);
     } catch (error) {
+      console.error(error);
       throw new Error('Failed to delete todo');
     }
   },
 
-  async batchUpdate(ids: string[], action: 'complete' | 'delete') {
+  async batchUpdate(ids: string[], action: 'complete' | 'delete' | 'update') {
     try {
       return await mockApi.batchUpdateTodos(ids, action);
     } catch (error) {
+      console.error(error);
       throw new Error('Failed to perform batch update');
     }
   },

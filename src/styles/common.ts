@@ -31,10 +31,10 @@ export const INPUT_STYLES = {
   error: {
     text: {
       color: COLORS.accent.red,
-      fontSize: 12,
-      marginTop: 4,
+      fontSize: 10,
+      marginTop: 37,
       positionType: "absolute",
-      bottom: -20,
+      bottom: 0,
       left: 0,
     }
   }

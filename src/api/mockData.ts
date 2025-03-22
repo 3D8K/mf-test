@@ -96,7 +96,7 @@ export const mockApi = {
     return { success: true };
   },
 
-  async batchUpdateTodos(ids: string[], action: 'complete' | 'delete') {
+  async batchUpdateTodos(ids: string[], action: 'complete' | 'delete' | 'update') {
     await delay();
     if (action === 'delete') {
       todos = todos.filter(todo => !ids.includes(todo.id));
